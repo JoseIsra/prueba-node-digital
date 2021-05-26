@@ -1,4 +1,4 @@
-const getLoop = require('./callHelpers/CallLoop');
+import { getLoop } from './callHelpers/CallLoop';
 import { premutationsIds, User } from './Intefaces/theInterfaces';
 import { fetchApi } from './API/fetchApi';
 

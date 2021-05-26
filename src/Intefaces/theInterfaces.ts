@@ -51,18 +51,18 @@ export interface ChapterNContent {
 }
 
 export interface User {
-  firstname?: string,
-  firstName:string, 
-  idNUmber?:string, 
-  lastname?:string,
-  email:string, 
-  phone1?:string, 
-  address?:string, 
-  imagealt?:string,
-  documentNumber: number,
-  documentType: number,
-  fatherName:string,
-  motherName:string
+  firstname?: string;
+  firstName:string;
+  idNUmber?:string; 
+  lastname?:string;
+  email:string;
+  phone1?:string; 
+  address?:string; 
+  imagealt?:string;
+  documentNumber: number;
+  documentType: number;
+  fatherName:string;
+  motherName:string;
 }
 
 export interface Course{
