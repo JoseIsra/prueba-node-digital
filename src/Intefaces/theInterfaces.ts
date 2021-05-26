@@ -2,8 +2,8 @@ export interface premutationsIds{
     idClassroom: number;
     idService: number; 
     idContentGroup: number; 
-    idsContent: loopOfIds[],
-    idsChapter: loopOfIds[],
+    idsContent: loopOfIds[];
+    idsChapter: loopOfIds[];
     idRoom: number;
     idUser: number;
     idGroup: number;
