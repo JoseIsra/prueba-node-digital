@@ -1,0 +1,68 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+//const fetchApi = require('./fetchconfig');
+const { ChapterNContent, Course } = require('../Intefaces/theInterfaces');
+const getLoop = function callLoop(connection, idClasroom, idContentGroup) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let chapterNContent = {
+            idContentArray: [],
+            idChapterArray: []
+        };
+        let idContentTemp = "";
+        return new Promise(function (resolve, reject) {
+            connection.query(`
+        SELECT * FROM mdl_course`, (err, results) => {
+                if (err)
+                    throw err;
+                results.forEach((element) => __awaiter(this, void 0, void 0, function* () {
+                    let contentMutation = `
+            mutation createContent{
+              createContent(classroomId: ${idClasroom}, input: {
+                category: 1,
+                contentgroupId: ${idContentGroup},
+                description: "${element.summary}",
+                hidden: false,
+                name: "${element.fullname}",
+                options: "${JSON.stringify(element)}", 
+                order: 1,
+                url: "",
+                }){
+                    id,
+                    name
+                }
+            }`;
+                    const contentQuery = JSON.stringify({ query: `${contentMutation}` });
+                    //const contentData = await fetchApi(contentQuery);
+                    //chapterNContent.idContentArray.push(contentData['createContent']);
+                    //idContentTemp = contentData['createContent'].id;
+                    let chapterMutation = `
+            mutation createChapter{
+                createChapter(classroomId: ${idClasroom}, input: {
+                    contentId:  ${idContentTemp},
+                    hidden: 1,
+                    name: "${element.fullname}",
+                    option: "${JSON.stringify(element)}", 
+                    order: 1
+                    }){
+                        id,
+                        name
+                    }
+            }`;
+                    const chapterQuery = JSON.stringify({ query: `${chapterMutation}` });
+                    //const chapterData = await fetchApi(chapterQuery);
+                    //chapterNContent.idChapterArray.push(chapterData['createChapter']);
+                }));
+                resolve(chapterNContent);
+            });
+        });
+    });
+};
+module.exports = getLoop;

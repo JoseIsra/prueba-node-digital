@@ -1,4 +1,0 @@
-
-// const getUser = function callUser() {
-
-// }

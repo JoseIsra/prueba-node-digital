@@ -9,7 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const mysql = require('mysql');
-let database_name = 'mydb';
+const getUser = require('./callHelpers/CallUserMoodle');
+const getTeachers = require('./callHelpers/CallTeachers');
+let database_name = 'moodle';
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -30,10 +32,13 @@ connection.query(`
   LIMIT 1;`, (err, results) => __awaiter(void 0, void 0, void 0, function* () {
     if (err)
         console.log('error');
-    console.log(results);
-    // if(results.length == 0){
-    //   let dataUser = await getUser(connection, true); 
-    // }else{
-    //   console.log("Without prefix");
-    // }
+    if (results.length == 0) {
+        let dataUser = yield getUser(connection, true);
+        let teachers = yield getTeachers(connection);
+        console.log(dataUser);
+        console.log(teachers);
+    }
+    else {
+        console.log("Without prefix");
+    }
 }));

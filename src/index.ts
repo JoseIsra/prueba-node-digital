@@ -1,7 +1,8 @@
 const mysql = require('mysql');
+const getUser = require('./callHelpers/CallUserMoodle');
+const getTeachers = require('./callHelpers/CallTeachers');
 
-
-let database_name = 'mydb';
+let database_name = 'moodle';
 
 const connection = mysql.createConnection({
   host     : 'localhost',
@@ -29,7 +30,9 @@ connection.query(`
     
   if(results.length == 0){
     let dataUser = await getUser(connection, true); 
+    let teachers = await getTeachers(connection);
     console.log(dataUser);
+    console.log(teachers);
     
   }else{
     console.log("Without prefix");
