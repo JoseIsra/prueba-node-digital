@@ -16,3 +16,31 @@ interface loopOfIds{
     id: number;
     name: string;
 }
+
+export interface questionQuery{
+    statement: string;
+    hint: string; 
+    answer: string;
+    length: number; 
+    type: string; 
+    courseName: string;
+}
+
+export interface singleTaskQuery{
+    title: string; 
+    endDate: string;
+    initDate: string; 
+    courseName: string;
+}
+
+export interface taskGroupQuery{
+    name: string;
+}
+
+export interface postQuery{
+    description: string;
+}
+
+export interface eventQuery{
+    description: string;
+}

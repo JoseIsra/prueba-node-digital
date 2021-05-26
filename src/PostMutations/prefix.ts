@@ -1,5 +1,5 @@
 import { fetchApi } from '../API/fetchApi';
-import { premutationsIds } from '../Intefaces/theInterfaces';
+import { premutationsIds, questionQuery, singleTaskQuery, taskGroupQuery, postQuery, eventQuery } from '../Intefaces/theInterfaces';
 
 
 export function runPrefix(connection: any, theData: premutationsIds){
@@ -12,10 +12,10 @@ export function runPrefix(connection: any, theData: premutationsIds){
         INNER JOIN mdl_question_answers  mqa ON mmq.id = mqa.question
         INNER JOIN mdl_quiz mmz ON mmq.parent = mmz.id
         INNER JOIN mdl_course mmc ON mmc.id = mmz.course;`,
-        (err: any, results: any) => {
+        (err: any, results: questionQuery[]) => {
         if (err) throw err;
 
-        results.forEach( function(element: any){
+        results.forEach( function(element: questionQuery){
             theData.idsChapter.forEach( theChapter => {
                 if(theChapter.name == element.courseName){
                     let theQuery = `
@@ -49,10 +49,10 @@ export function runPrefix(connection: any, theData: premutationsIds){
         Cast(allowsubmissionsfromdate as char(255)) as initDate, mmc.fullname as courseName
         FROM mdl_assign mma
         INNER JOIN mdl_course mmc ON mma.course = mmc.id ;`, 
-        (err: any, results: any) => {
+        (err: any, results: singleTaskQuery[]) => {
         if (err) throw err;
 
-        results.forEach(function(element: any){
+        results.forEach(function(element: singleTaskQuery){
             theData.idsContent.forEach( theContent => {
                 if(theContent.name == element.courseName){
                     let theQuery = `
@@ -84,19 +84,16 @@ export function runPrefix(connection: any, theData: premutationsIds){
 
     /** TASKGROUP **/
     connection.query(`
-        SELECT mg.id, courseid as roomid, name, Cast(mg.timecreated as char(255)),Cast(mg.timemodified as char(255)),
-        mdu.id as userId, CONCAT(firstname, lastname)  
-        FROM mdl_groups mg 
-        INNER JOIN mdl_groups_members mgm ON mg.id = mgm.groupid 
-        INNER JOIN mdl_user mdu ON mgm.userid = mdu.id;`, 
-        (err: any, results: any) => {
+        SELECT *
+        FROM mdl_groups;`, 
+        (err: any, results: taskGroupQuery[]) => {
         if (err) throw err;
 
-        results.forEach(function(element: any){
+        results.forEach(function(element: taskGroupQuery){
             let theQuery = `
             mutation createTaskGroup{ 
                 createTaskGroup (classroomId: ${theData.idClassroom},, input:{
-                    members: "",
+                    members: "${JSON.stringify(element)}", 
                     name: "${element.name}",
                     roomId: ${theData.idRoom},
                     userId: ${theData.idUser}
@@ -113,13 +110,12 @@ export function runPrefix(connection: any, theData: premutationsIds){
 
     /** POST **/
     connection.query(`
-        SELECT id, userid, courseid, CONCAT(subject,summary,content) as description , lastmodified, created,
-        0, 0, 0, 0, '', 0, 0, 0, 0, '', 0
+        SELECT CONCAT(subject,summary,content) as description
         FROM mdl_post;`,
-        (err: any, results: any) => {
+        (err: any, results: postQuery[]) => {
         if (err) throw err;
 
-        results.forEach(function(element: any){
+        results.forEach(function(element: postQuery){
         let theQuery = `
             mutation createPost{
                 createPost(classroomId: ${theData.idClassroom}, input: {
@@ -130,7 +126,7 @@ export function runPrefix(connection: any, theData: premutationsIds){
                     description: "${element.description}",
                     isVideo: false,
                     privacy: false,
-                    url: "",
+                    url: "url_test",
                     userid: ${theData.idUser}
                 }){
                     description
@@ -144,10 +140,10 @@ export function runPrefix(connection: any, theData: premutationsIds){
     /** EVENT AND USER_EVENT**/
     connection.query(`
         SELECT * FROM mdl_event;`,
-        (err: any, results: any) => {
+        (err: any, results: eventQuery[]) => {
         if (err) throw err;
         
-        results.forEach( async function(element: any){
+        results.forEach( async function(element: eventQuery){
             let theQuery = `
             mutation createEvent{
                 createEvent(classroomId: ${theData.idClassroom}, input: {
