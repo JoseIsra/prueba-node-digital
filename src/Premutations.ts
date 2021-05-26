@@ -1,10 +1,10 @@
 const getLoop = require('./callHelpers/CallLoop');
-import { premutationsIds } from './Intefaces/theInterfaces';
+import { premutationsIds, User } from './Intefaces/theInterfaces';
 import { fetchApi } from './API/fetchApi';
 
 let theData: premutationsIds;
 
-export async function preMutations(connection: any, dataUser: any, teachers: string){
+export async function preMutations(connection: any, dataUser:User, teachers: string){
     let clasroomMutation = `
     mutation createClassroom{
         createClassroom(input: {

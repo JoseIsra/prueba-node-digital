@@ -1,6 +1,6 @@
 const Teacher = require('../Intefaces/theInterfaces');
 
-function callTeacherFromMoodle(connection:any) {
+function callTeacherFromMoodle(connection:any):Promise<string> {
   return new Promise((resolve, reject) => {
     connection.query(`
     SELECT CONCAT(firstname,' ',lastname) as name

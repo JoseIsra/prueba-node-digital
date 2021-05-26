@@ -1,10 +1,8 @@
 import { User } from "../Intefaces/theInterfaces";
 
-const  User = require('../Intefaces/theInterfaces');
+function callUser(connection:any , hasPrefix:boolean):Promise<User> {
 
-function callUser(connection:any , hasPrefix:boolean):typeof User {
-
-  return new Promise<typeof User>(function (resolve,reject) {
+  return new Promise(function (resolve,reject) {
     if(hasPrefix) {
       connection.query(`
         SELECT firstname, idNUmber*1, lastname, email, phone1, address, imagealt
