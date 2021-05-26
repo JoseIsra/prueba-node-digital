@@ -17,7 +17,7 @@ export function callTeacherFromMoodle(connection: any): Promise<string>{
       }, "");
 
       resolve(teacherString);
-     });
+    });
   });
 };
 
