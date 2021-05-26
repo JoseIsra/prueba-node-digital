@@ -8,7 +8,7 @@ export function callUserFromMoodle(connection:any , hasPrefix:boolean): Promise<
         SELECT firstname, idNUmber*1, lastname, email, phone1, address, imagealt
         FROM mdl_user 
         where username="admin";`,
-        (err:Error, results:any) => {
+        (err: any, results: User[]) => {
         if (err) throw err;
 
         let dataUser: User = {

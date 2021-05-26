@@ -1,6 +1,8 @@
 const mysql = require('mysql');
+import { preMutations } from './Premutations';
 import { callTeacherFromMoodle } from './callHelpers/CallTeachers';
 import { callUserFromMoodle } from './callHelpers/CallUserMoodle';
+import { premutationsIds, User } from './Intefaces/theInterfaces';
 
 let database_name = 'moodle';
 
@@ -29,10 +31,11 @@ connection.query(`
     
     
   if(results.length == 0){
-    let dataUser = await callUserFromMoodle(connection, true); 
-    let teachers = await callTeacherFromMoodle(connection);
+    let dataUser: User = await callUserFromMoodle(connection, true); 
+    let teachers: string = await callTeacherFromMoodle(connection);
     console.log(dataUser);
     console.log(teachers);
+    let premutationsIds: premutationsIds = await preMutations(connection, dataUser, teachers);
   }else{
     console.log("Without prefix");
   }
