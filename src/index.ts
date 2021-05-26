@@ -33,8 +33,6 @@ connection.query(`
   if(results.length == 0){
     let dataUser: User = await callUserFromMoodle(connection, true); 
     let teachers: string = await callTeacherFromMoodle(connection);
-    console.log(dataUser);
-    console.log(teachers);
     let premutationsIds: premutationsIds = await preMutations(connection, dataUser, teachers);
   }else{
     console.log("Without prefix");

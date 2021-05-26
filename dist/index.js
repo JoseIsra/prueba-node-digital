@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mysql = require('mysql');
-const Premutations_1 = require("./Premutations");
+const Premutations_1 = require("./PreMutations/Premutations");
 const CallTeachers_1 = require("./callHelpers/CallTeachers");
 const CallUserMoodle_1 = require("./callHelpers/CallUserMoodle");
 let database_name = 'moodle';
@@ -37,8 +37,6 @@ connection.query(`
     if (results.length == 0) {
         let dataUser = yield CallUserMoodle_1.callUserFromMoodle(connection, true);
         let teachers = yield CallTeachers_1.callTeacherFromMoodle(connection);
-        console.log(dataUser);
-        console.log(teachers);
         let premutationsIds = yield Premutations_1.preMutations(connection, dataUser, teachers);
     }
     else {

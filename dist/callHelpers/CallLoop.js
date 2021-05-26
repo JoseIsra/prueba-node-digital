@@ -20,10 +20,13 @@ function getLoop(connection, idClasroom, idContentGroup) {
         let idContentTemp = "";
         return new Promise(function (resolve, reject) {
             connection.query(`
-        SELECT * FROM mdl_course`, (err, results) => {
+        SELECT * FROM mdl_course`, (err, results) => __awaiter(this, void 0, void 0, function* () {
                 if (err)
                     throw err;
                 results.forEach((element) => __awaiter(this, void 0, void 0, function* () {
+                    if (element.summary == "")
+                        element.summary = "description_test";
+                    let options = JSON.stringify(element);
                     let contentMutation = `
             mutation createContent{
               createContent(classroomId: ${idClasroom}, input: {
@@ -32,9 +35,9 @@ function getLoop(connection, idClasroom, idContentGroup) {
                 description: "${element.summary}",
                 hidden: false,
                 name: "${element.fullname}",
-                options: "${JSON.stringify(element)}", 
+                options: "options", 
                 order: 1,
-                url: "",
+                url: "url_test",
                 }){
                     id,
                     name
@@ -47,10 +50,10 @@ function getLoop(connection, idClasroom, idContentGroup) {
                     let chapterMutation = `
             mutation createChapter{
                 createChapter(classroomId: ${idClasroom}, input: {
-                    contentId:  ${idContentTemp},
+                    contentId: ${idContentTemp},
                     hidden: 1,
                     name: "${element.fullname}",
-                    option: "${JSON.stringify(element)}", 
+                    option: "options", 
                     order: 1
                     }){
                         id,
@@ -62,7 +65,7 @@ function getLoop(connection, idClasroom, idContentGroup) {
                     chapterNContent.idChapterArray.push(chapterData['createChapter']);
                 }));
                 resolve(chapterNContent);
-            });
+            }));
         });
     });
 }

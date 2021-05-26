@@ -1,18 +1,18 @@
 export interface premutationsIds{
-    idClassroom: number;
-    idService: number; 
-    idContentGroup: number; 
+    idClassroom: string;
+    idService: string; 
+    idContentGroup: string; 
     idsContent: loopOfIds[];
     idsChapter: loopOfIds[];
-    idRoom: number;
-    idUser: number;
-    idGroup: number;
-    idSubGroup: number;
-    idEvent: number;
-    idCalendar: number;
+    idRoom: string;
+    idUser: string;
+    idGroup: string;
+    idSubGroup: string;
+    idEvent: string
+    idCalendar: string;
 }
 
-interface loopOfIds{
+export interface loopOfIds{
     id: number;
     name: string;
 }

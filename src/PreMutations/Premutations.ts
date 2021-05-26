@@ -1,11 +1,26 @@
 import { getLoop } from '../callHelpers/CallLoop';
 import { premutationsIds, User } from '../Intefaces/theInterfaces';
 import { fetchApi } from '../API/fetchApi';
+import { loopOfIds } from '../Intefaces/theInterfaces';
 
-let theData: premutationsIds;
+let theData = {
+  idClassroom: "",
+  idService: "",  
+  idContentGroup: "", 
+  idsContent: [] as loopOfIds[], 
+  idsChapter: [] as loopOfIds[],
+  idRoom: "",
+  idUser: "",
+  idGroup: "",
+  idSubGroup: "",
+  idEvent: "",
+  idCalendar: "",
+};
 
 export async function preMutations(connection: any, dataUser:User, teachers: string): Promise<premutationsIds>{
-    let clasroomMutation = `
+    
+  /*
+  let clasroomMutation = `
     mutation createClassroom{
         createClassroom(input: {
           active : true,
@@ -24,6 +39,10 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     const classroomData = await fetchApi(classroomQuery);
     console.log(classroomData);
     theData.idClassroom = classroomData['createClassroom'].id;
+    */
+
+    // HARDCODING 
+    theData.idClassroom = "7"; 
 
     //SERVICE
     let serviceMutation = `
@@ -34,8 +53,9 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test",
+            name: "service_test_22",
             paymentMethods: "payment_test",
+            previewVideo: "previewVideo_test",
             pricing: "pricing_test",
             secret: 1,
             teachers: "${teachers}",
@@ -45,7 +65,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     }`;
     const serviceQuery = JSON.stringify({ query: `${serviceMutation}`});
     const serviceData = await fetchApi(serviceQuery);
-    console.log(serviceData);
+    console.log(serviceData['createService'].id);
     theData.idService = serviceData['createService'].id;
     
 
@@ -62,10 +82,10 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     }`;
     const contentGroupQuery = JSON.stringify({ query: `${contentGroupMutation}`});
     const contentgroupData = await fetchApi(contentGroupQuery);
-    console.log(contentgroupData);
-    theData.idContentGroup = contentgroupData['createContentGroup'].id;
+    console.log(contentgroupData['createContentgroup'].id);
+    theData.idContentGroup = contentgroupData['createContentgroup'].id;
 
-
+    /*
     // USER
     let userMutation = `
     mutation createAzUser{
@@ -83,9 +103,10 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
 
     const userQuery = JSON.stringify({ query: `${userMutation}`});
     const userData = await fetchApi(userQuery);
-    console.log(userData);
+    console.log(userData['createAzUser'].id);
     theData.idUser = userData['createAzUser'].id;
-
+    */
+    theData.idUser = "6"; // fu.vargas.les.ter@gmail.com
 
     // GROUP
     let groupMutation =`
@@ -93,7 +114,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
       createGroup(classroomId:${theData.idClassroom}, input: {
         category: 1,
         classroomId: ${theData.idClassroom},
-        hidden: false,
+        hidden: 1,
         name: "group_test"
       }) {
         id
@@ -102,7 +123,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
 
     const groupQuery = JSON.stringify({ query: `${groupMutation}`});
     const groupData = await fetchApi(groupQuery);
-    console.log(groupData);
+    console.log(groupData['createGroup'].id);
     theData.idGroup = groupData['createGroup'].id;
 
 
@@ -120,7 +141,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
 
     const subgroupQuery = JSON.stringify({ query: `${subgroupMutation}`});
     const subgroupData = await fetchApi(subgroupQuery);
-    console.log(subgroupData);
+    console.log(subgroupData['createSubgroup'].id);
     theData.idSubGroup = subgroupData['createSubgroup'].id;
 
 
@@ -129,14 +150,22 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     mutation createRoom{
       createRoom(classroomId:${theData.idClassroom}, input: {
         adminApproved: true,
+        category: 1,
+        classDays: "class_days_test",
         code: "code_test",
         configurations: "config_test",
+        cycle: 0,
+        endHour: "endHour_test",
         hidden: false,
+        initHour: "initHour_test",
+        limit: 100,
         locked: false,
         name: "name_test",
         privateCode: "privateCode_test",
         publicCode: "publicCode_test",
-        subgroupId: ${theData.idSubGroup}
+        subgroupId: ${theData.idSubGroup},
+        type: "type_test"
+        value: 1.0
       }) {
         id
       }
@@ -144,10 +173,10 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
 
     const roomQuery = JSON.stringify({ query: `${roomMutation}`});
     const roomData = await fetchApi(roomQuery);
-    console.log(roomData);
+    console.log(roomData['createRoom'].id);
     theData.idRoom =  roomData['createRoom'].id;
 
-
+    
     // CALENDAR
     let calendarMutation =`
     mutation createCalendar{
@@ -164,15 +193,16 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
 
     const calendarQuery = JSON.stringify({ query: `${calendarMutation}`});
     const calendarData = await fetchApi(calendarQuery);
-    console.log(calendarData);
+    console.log(calendarData['createCalendar'].id);
     theData.idCalendar = calendarData['createCalendar'].id;
+    
 
-    /*
+    
     // CONTENT AND CHAPTER
     let chapterNContent = await getLoop(connection, theData.idClassroom, theData.idContentGroup);
     theData.idsContent = chapterNContent.idContentArray;    
     theData.idsChapter = chapterNContent.idChapterArray;
-    */
+    
     
     console.log(theData);
 

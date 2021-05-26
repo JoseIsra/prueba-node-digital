@@ -1,7 +1,7 @@
 import { fetchApi } from '../API/fetchApi';
 import { ChapterNContent, Course } from '../Intefaces/theInterfaces';
 
-export async function getLoop(connection: any, idClasroom: number, idContentGroup: number) {
+export async function getLoop(connection: any, idClasroom: string, idContentGroup: string): Promise<ChapterNContent> {
 
     let chapterNContent: ChapterNContent = {
         idContentArray: [],
@@ -12,10 +12,13 @@ export async function getLoop(connection: any, idClasroom: number, idContentGrou
     return new Promise(function (resolve,reject) {
         connection.query(`
         SELECT * FROM mdl_course`,
-        (err: any, results: Course[]) => {
+        async (err: any, results: Course[]) => {
         if (err) throw err;
 
         results.forEach(async (element: Course) => {
+            if(element.summary == "") element.summary = "description_test";
+            let options = JSON.stringify(element);
+
             let contentMutation = `
             mutation createContent{
               createContent(classroomId: ${idClasroom}, input: {
@@ -24,28 +27,28 @@ export async function getLoop(connection: any, idClasroom: number, idContentGrou
                 description: "${element.summary}",
                 hidden: false,
                 name: "${element.fullname}",
-                options: "${JSON.stringify(element)}", 
+                options: "options", 
                 order: 1,
-                url: "",
+                url: "url_test",
                 }){
                     id,
                     name
                 }
             }`;
-        
+            
             const contentQuery = JSON.stringify({ query: `${contentMutation}`});
             const contentData = await fetchApi(contentQuery);
             chapterNContent.idContentArray.push(contentData['createContent']);
             idContentTemp = contentData['createContent'].id;
 
-
+            
             let chapterMutation = `
             mutation createChapter{
                 createChapter(classroomId: ${idClasroom}, input: {
-                    contentId:  ${idContentTemp},
+                    contentId: ${idContentTemp},
                     hidden: 1,
                     name: "${element.fullname}",
-                    option: "${JSON.stringify(element)}", 
+                    option: "options", 
                     order: 1
                     }){
                         id,
@@ -56,6 +59,7 @@ export async function getLoop(connection: any, idClasroom: number, idContentGrou
             const chapterQuery = JSON.stringify({ query: `${chapterMutation}`});
             const chapterData = await fetchApi(chapterQuery);
             chapterNContent.idChapterArray.push(chapterData['createChapter']);
+            
         });
     
         resolve(chapterNContent);
