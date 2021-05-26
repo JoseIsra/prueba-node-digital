@@ -4,7 +4,7 @@ import { fetchApi } from './API/fetchApi';
 
 let theData: premutationsIds;
 
-export async function preMutations(connection: any, dataUser, teachers: string){
+export async function preMutations(connection: any, dataUser: any, teachers: string){
     let clasroomMutation = `
     mutation createClassroom{
         createClassroom(input: {
