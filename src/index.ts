@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-import { preMutations } from './Premutations';
+import { preMutations } from './PreMutations/Premutations';
 import { callTeacherFromMoodle } from './callHelpers/CallTeachers';
 import { callUserFromMoodle } from './callHelpers/CallUserMoodle';
 import { premutationsIds, User } from './Intefaces/theInterfaces';

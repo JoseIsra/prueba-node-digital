@@ -1,6 +1,6 @@
-import { getLoop } from './callHelpers/CallLoop';
-import { premutationsIds, User } from './Intefaces/theInterfaces';
-import { fetchApi } from './API/fetchApi';
+import { getLoop } from '../callHelpers/CallLoop';
+import { premutationsIds, User } from '../Intefaces/theInterfaces';
+import { fetchApi } from '../API/fetchApi';
 
 let theData: premutationsIds;
 
