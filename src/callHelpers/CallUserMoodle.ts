@@ -1,8 +1,8 @@
 import { User } from "../Intefaces/theInterfaces";
 
-function callUser(connection:any , hasPrefix:boolean):Promise<User> {
+export function callUserFromMoodle(connection:any , hasPrefix:boolean): Promise<User>{
 
-  return new Promise(function (resolve,reject) {
+  return new Promise<User>(function (resolve,reject) {
     if(hasPrefix) {
       connection.query(`
         SELECT firstname, idNUmber*1, lastname, email, phone1, address, imagealt
@@ -10,8 +10,8 @@ function callUser(connection:any , hasPrefix:boolean):Promise<User> {
         where username="admin";`,
         (err:Error, results:any) => {
         if (err) throw err;
-        let dataUser = {} as User;
-          dataUser = {
+
+        let dataUser: User = {
           documentNumber: 1,
           documentType: 1,
           email: `${results[0].email}`,
@@ -19,14 +19,13 @@ function callUser(connection:any , hasPrefix:boolean):Promise<User> {
           firstName: `${results[0].firstname}`,
           motherName: `${results[0].lastname}`,
         }
+
         resolve(dataUser);
 
       });
     }else{
-      console.log("no prefijo");
-      
+      console.log("Without prefix");
     }
   })
 }
 
-module.exports = callUser;

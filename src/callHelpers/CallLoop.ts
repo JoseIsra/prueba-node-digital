@@ -1,8 +1,9 @@
-import  { fetchApi } from '../API/fetchApi';
-const { ChapterNContent, Course } = require('../Intefaces/theInterfaces');
-const getLoop = async function callLoop(connection:any, idClasroom:number, idContentGroup:number) {
+import { fetchApi } from '../API/fetchApi';
+import { ChapterNContent, Course } from '../Intefaces/theInterfaces';
 
-    let chapterNContent:typeof ChapterNContent = {
+export async function getLoop(connection: any, idClasroom: number, idContentGroup: number) {
+
+    let chapterNContent: ChapterNContent = {
         idContentArray: [],
         idChapterArray: []
     }
@@ -11,10 +12,10 @@ const getLoop = async function callLoop(connection:any, idClasroom:number, idCon
     return new Promise(function (resolve,reject) {
         connection.query(`
         SELECT * FROM mdl_course`,
-        (err:Error, results:typeof Course[]) => {
+        (err: any, results: Course[]) => {
         if (err) throw err;
 
-        results.forEach(async (element:typeof Course) => {
+        results.forEach(async (element: Course) => {
             let contentMutation = `
             mutation createContent{
               createContent(classroomId: ${idClasroom}, input: {
@@ -32,7 +33,7 @@ const getLoop = async function callLoop(connection:any, idClasroom:number, idCon
                 }
             }`;
         
-            const contentQuery:string = JSON.stringify({ query: `${contentMutation}`});
+            const contentQuery = JSON.stringify({ query: `${contentMutation}`});
             const contentData = await fetchApi(contentQuery);
             chapterNContent.idContentArray.push(contentData['createContent']);
             idContentTemp = contentData['createContent'].id;
@@ -52,7 +53,7 @@ const getLoop = async function callLoop(connection:any, idClasroom:number, idCon
                     }
             }`;
 
-            const chapterQuery:string = JSON.stringify({ query: `${chapterMutation}`});
+            const chapterQuery = JSON.stringify({ query: `${chapterMutation}`});
             const chapterData = await fetchApi(chapterQuery);
             chapterNContent.idChapterArray.push(chapterData['createChapter']);
         });
@@ -63,4 +64,3 @@ const getLoop = async function callLoop(connection:any, idClasroom:number, idCon
     })
 }
   
-module.exports = getLoop;

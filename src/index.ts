@@ -1,7 +1,6 @@
 const mysql = require('mysql');
-const getUser = require('./callHelpers/CallUserMoodle');
-const getTeachers = require('./callHelpers/CallTeachers');
-
+import { callTeacherFromMoodle } from './callHelpers/CallTeachers';
+import { callUserFromMoodle } from './callHelpers/CallUserMoodle';
 
 let database_name = 'moodle';
 
@@ -30,11 +29,10 @@ connection.query(`
     
     
   if(results.length == 0){
-    let dataUser = await getUser(connection, true); 
-    let teachers = await getTeachers(connection);
+    let dataUser = await callUserFromMoodle(connection, true); 
+    let teachers = await callTeacherFromMoodle(connection);
     console.log(dataUser);
     console.log(teachers);
-    
   }else{
     console.log("Without prefix");
   }
