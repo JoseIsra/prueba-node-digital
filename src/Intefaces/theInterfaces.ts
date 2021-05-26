@@ -96,6 +96,6 @@ export interface Course{
     originalcourseid: number;
 }
 
-export interface Teacher{
+export interface teacher{
     name:string;
 }
