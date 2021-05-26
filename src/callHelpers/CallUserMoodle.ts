@@ -1,3 +1,5 @@
+import { User } from "../Intefaces/theInterfaces";
+
 const  User = require('../Intefaces/theInterfaces');
 
 function callUser(connection:any , hasPrefix:boolean):typeof User {
@@ -10,8 +12,8 @@ function callUser(connection:any , hasPrefix:boolean):typeof User {
         where username="admin";`,
         (err:Error, results:any) => {
         if (err) throw err;
-        
-        const dataUser :typeof User = {
+        let dataUser = {} as User;
+          dataUser = {
           documentNumber: 1,
           documentType: 1,
           email: `${results[0].email}`,
