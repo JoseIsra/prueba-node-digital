@@ -1,4 +1,4 @@
-//const fetchApi = require('./fetchconfig');
+import  { fetchApi } from '../API/fetchApi';
 const { ChapterNContent, Course } = require('../Intefaces/theInterfaces');
 const getLoop = async function callLoop(connection:any, idClasroom:number, idContentGroup:number) {
 
@@ -33,9 +33,9 @@ const getLoop = async function callLoop(connection:any, idClasroom:number, idCon
             }`;
         
             const contentQuery:string = JSON.stringify({ query: `${contentMutation}`});
-            //const contentData = await fetchApi(contentQuery);
-            //chapterNContent.idContentArray.push(contentData['createContent']);
-            //idContentTemp = contentData['createContent'].id;
+            const contentData = await fetchApi(contentQuery);
+            chapterNContent.idContentArray.push(contentData['createContent']);
+            idContentTemp = contentData['createContent'].id;
 
 
             let chapterMutation = `
@@ -53,8 +53,8 @@ const getLoop = async function callLoop(connection:any, idClasroom:number, idCon
             }`;
 
             const chapterQuery:string = JSON.stringify({ query: `${chapterMutation}`});
-            //const chapterData = await fetchApi(chapterQuery);
-            //chapterNContent.idChapterArray.push(chapterData['createChapter']);
+            const chapterData = await fetchApi(chapterQuery);
+            chapterNContent.idChapterArray.push(chapterData['createChapter']);
         });
     
         resolve(chapterNContent);
