@@ -2,6 +2,7 @@ const mysql = require('mysql');
 const getUser = require('./callHelpers/CallUserMoodle');
 const getTeachers = require('./callHelpers/CallTeachers');
 
+
 let database_name = 'moodle';
 
 const connection = mysql.createConnection({
