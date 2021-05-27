@@ -4,7 +4,18 @@ export function callCourseFromMoodle(connection: any, hasPrefix: boolean): Promi
 
     return new Promise( function (resolve,reject) {
         connection.query(`
-        SELECT * FROM mdl_course`,
+        SELECT fullname, CONCAT("{ category:",category,
+        ",sortorder:",sortorder,",fullname:",fullname,",shortname:",
+        shortname,",summaryformat:",summaryformat,",format:",format,
+        ",showgrades:",showgrades,",newsitems:",newsitems,",startdate:",
+        startdate,",enddate:",enddate,",relativedatesmode:",relativedatesmode,
+        ",marker:",marker,",maxbytes:",maxbytes,",legacyfiles:",legacyfiles,",showreports:",showreports,",visible:",visible,",visibleold:"
+        ,visibleold,",downloadcontent:",IFNULL(downloadcontent," empty"),
+        ",groupmode:",groupmode,",groupmodeforce:",groupmodeforce,",defaultgrouping:",defaultgroupingid,
+        ",timecreated:",timecreated,",timemodified:",timemodified,",requested:",requested,",enablecompletion:",enablecompletion,",completionnotify:",completionnotify,
+        "}") as options
+        FROM mdl_course;
+        `,
         (err: any, results: Course[]) => {
         if (err) throw err;
         resolve(results);

@@ -65,42 +65,14 @@ export interface User {
 }
 
 export interface Course{
-    id: number;
-    category: number;
-    sortorder: number;
-    fullname: string;
-    shortname: string;
-    idnumber: string;
-    summary: string;
-    summaryformat: number;
-    format: string;
-    showgrades: number;
-    newsitems: number;
-    startdate: number;
-    enddate: number;
-    relativedatesmode: number;
-    marker: number;
-    maxbytes: number;
-    legacyfiles: number;
-    showreports: number;
-    visible: number;
-    visibleold: number;
-    downloadcontent: number;
-    groupmode: number;
-    groupmodeforce: number;
-    defaultgroupingid: number;
-    lang: string;
-    calendartype: string;
-    theme: string;
-    timecreated: number;
-    timemodified: number;
-    requested: number;
-    enablecompletion: number;
-    completionnotify: number;
-    cacherev: number;
-    originalcourseid: number;
+  fullname:string;
+  options:string;
 }
 
 export interface teacher{
     name:string;
+}
+
+export interface MembersQuery {
+  firstname: string;
 }

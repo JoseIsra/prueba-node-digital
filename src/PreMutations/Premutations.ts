@@ -201,7 +201,6 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     let results: Course[] = await callCourseFromMoodle(connection, true);
     
     await Promise.all(results.map(async (element: Course)=>{
-      if(element.summary == "") element.summary = "description_test";
       let idContentTemp: string; 
 
       let contentMutation = `
@@ -209,7 +208,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
         createContent(classroomId: ${theData.idClassroom}, input: {
           category: 1,
           contentgroupId: ${theData.idContentGroup},
-          description: "${element.summary}",
+          description: "${element.fullname}",
           hidden: false,
           name: "${element.fullname}",
           options: "options", 
