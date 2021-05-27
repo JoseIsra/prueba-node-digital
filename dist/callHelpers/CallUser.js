@@ -7,7 +7,8 @@ function callUserFromMoodle(connection, hasPrefix, databaseName) {
             connection.query(`
         SELECT firstname, idNUmber*1, lastname, email, phone1, address, imagealt
         FROM mdl_user 
-        where username="admin";`, (err, results) => {
+        where id="2";`, //admin
+            (err, results) => {
                 if (err)
                     throw err;
                 let dataUser = {

@@ -57,7 +57,7 @@ export async function preMutations(connection: any,hasPrefix:boolean,databaseNam
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test_34",
+            name: "service_test_36",
             paymentMethods: "payment_test",
             previewVideo: "previewVideo_test",
             pricing: "pricing_test",

@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mysql = require('mysql');
 const Premutations_1 = require("./PreMutations/Premutations");
 const PostMutations_1 = require("./PostMutations/PostMutations");
-let databaseName = 'mydb';
+let databaseName = 'moodle';
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',

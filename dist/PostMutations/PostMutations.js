@@ -47,7 +47,6 @@ function PostMutations(connection, theData, hasPrefix, databaseName) {
                 }
             })));
         })));
-        console.log("questions");
         /*
         //SINGLE TASK
         let assignMoodle = await callAssignFromMoodle(connection, hasPrefix, databaseName);
@@ -101,7 +100,6 @@ function PostMutations(connection, theData, hasPrefix, databaseName) {
             const data = JSON.stringify({ query: `${theQuery}` });
             const result = yield fetchApi_1.fetchApi(data);
         })));
-        console.log("task_group");
         // POST 
         let postMoodle = yield CallPost_1.callPostFromMoodle(connection, hasPrefix, databaseName);
         yield Promise.all(postMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
@@ -125,7 +123,6 @@ function PostMutations(connection, theData, hasPrefix, databaseName) {
             const data = JSON.stringify({ query: `${theQuery}` });
             const result = yield fetchApi_1.fetchApi(data);
         })));
-        console.log("post");
         // EVENT AND USER_EVENT
         let eventMoodle = yield CallEvent_1.callEventFromMoodle(connection, hasPrefix, databaseName);
         yield Promise.all(eventMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
@@ -161,7 +158,6 @@ function PostMutations(connection, theData, hasPrefix, databaseName) {
             const userEventData = await fetchApi(userEventQuery);
             */
         })));
-        console.log("event");
         connection.end();
     });
 }

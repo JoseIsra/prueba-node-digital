@@ -39,7 +39,6 @@ export async function PostMutations(connection: any, theData: premutationsIds, h
             }
         }));
     }));
-    console.log("questions");
 
     /*
     //SINGLE TASK 
@@ -95,7 +94,6 @@ export async function PostMutations(connection: any, theData: premutationsIds, h
         const data = JSON.stringify({ query: `${theQuery}`});
         const result =  await fetchApi(data);
     }));
-    console.log("task_group");
 
 
     // POST 
@@ -121,7 +119,6 @@ export async function PostMutations(connection: any, theData: premutationsIds, h
         const data = JSON.stringify({ query: `${theQuery}`});
         const result =  await fetchApi(data);
     }));
-    console.log("post");
     
     
     
@@ -161,7 +158,6 @@ export async function PostMutations(connection: any, theData: premutationsIds, h
         const userEventData = await fetchApi(userEventQuery);
         */
     }));
-    console.log("event");
     
     
     connection.end();
