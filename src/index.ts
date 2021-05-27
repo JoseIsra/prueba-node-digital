@@ -1,9 +1,7 @@
 const mysql = require('mysql');
 import { preMutations } from './PreMutations/Premutations';
-import { callTeacherFromMoodle } from './callHelpers/CallTeachers';
-import { callUserFromMoodle } from './callHelpers/CallUserMoodle';
-import { premutationsIds, User } from './Intefaces/theInterfaces';
 import { PostMutations } from './PostMutations/PostMutations';
+import { premutationsIds } from './Intefaces/theInterfaces';
 
 let database_name = 'moodle';
 
@@ -32,12 +30,9 @@ connection.query(`
     
     
   if(results.length == 0){
-    /*
-    let dataUser: User = await callUserFromMoodle(connection, true); 
-    let teachers: string = await callTeacherFromMoodle(connection);
-    let premutationsIds: premutationsIds = await preMutations(connection, dataUser, teachers);
-    */
-
+    
+    //let premutationsIds: premutationsIds = await preMutations(connection);
+    
     let myData: premutationsIds = {
       idClassroom: '7',
       idService: '58',
@@ -50,6 +45,7 @@ connection.query(`
       idSubGroup: '33',
       idCalendar: '63'
     }
+    
     PostMutations(connection, myData);
     
   }else{

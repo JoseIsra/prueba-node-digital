@@ -11,42 +11,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostMutations = void 0;
 const fetchApi_1 = require("../API/fetchApi");
+const CallQuestions_1 = require("../callHelpers/CallQuestions");
+const CallGroups_1 = require("../callHelpers/CallGroups");
+const CallPost_1 = require("../callHelpers/CallPost");
 const CallEvent_1 = require("../callHelpers/CallEvent");
 function PostMutations(connection, theData) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(theData);
-        /*
         //QUESTIONS
-        let questionMoodle =  await callQuestionsFromMoodle(connection, true);
-        await Promise.all(questionMoodle.map(async (element: questionQuery)=>{
-            await Promise.all(theData.idsChapter.map(async (theChapter: loopOfIds)=>{
-                if(theChapter.name == element.courseName){
+        let questionMoodle = yield CallQuestions_1.callQuestionsFromMoodle(connection, true);
+        yield Promise.all(questionMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
+            yield Promise.all(theData.idsChapter.map((theChapter) => __awaiter(this, void 0, void 0, function* () {
+                if (theChapter.name == element.courseName) {
                     let theQuery = `
-                    mutation createQuestion{
-                        createQuestion(classroomId: ${theData.idClassroom}, input:{
-                            active: 1,
-                            alternatives: "alternatives_test",
-                            answer: "${element.answer}",
-                            chapterId: ${theChapter.id},
-                            hints: "${element.hint}",
-                            level: 1,
-                            order: 1,
-                            size: ${element.length},
-                            statement: "${element.statement}",
-                            statementUrl: "statementUrl_test",
-                            type: ${element.type}
-                        }) {
-                            id
-                        }
-                    }`;
-                    const data = JSON.stringify({ query: `${theQuery}`});
-                    const result =  await fetchApi(data);
+                mutation createQuestion{
+                    createQuestion(classroomId: ${theData.idClassroom}, input:{
+                        active: 1,
+                        alternatives: "alternatives_test",
+                        answer: "${element.answer}",
+                        chapterId: ${theChapter.id},
+                        hints: "${element.hint}",
+                        level: 1,
+                        order: 1,
+                        size: ${element.length},
+                        statement: "${element.statement}",
+                        statementUrl: "statementUrl_test",
+                        type: ${element.type}
+                    }) {
+                        id
+                    }
+                }`;
+                    const data = JSON.stringify({ query: `${theQuery}` });
+                    const result = yield fetchApi_1.fetchApi(data);
                 }
-            }));
-        }));
+            })));
+        })));
         console.log("questions");
-    
-        
+        /*
         //SINGLE TASK
         let assignMoodle = await callAssignFromMoodle(connection, true);
         console.log(assignMoodle);
@@ -80,53 +81,49 @@ function PostMutations(connection, theData) {
             }));
         }));
         console.log("single_task");
-        
-        
-        //TASKGROUP
-        let groupsMoodle = await callGroupFromMoodle(connection, true);
-        await Promise.all(groupsMoodle.map(async (element: taskGroupQuery)=>{
-            let theQuery = `
-            mutation createTaskGroup{
-                createTaskGroup (classroomId: ${theData.idClassroom},, input:{
-                    members: "options",
-                    name: "${element.name}",
-                    roomId: ${theData.idRoom},
-                    userId: ${theData.idUser}
-                }) {
-                    name
-                }
-            }`;
-            const data = JSON.stringify({ query: `${theQuery}`});
-            const result =  await fetchApi(data);
-        }));
-        console.log("task_group");
-    
-    
-        // POST
-        let postMoodle = await callPostFromMoodle(connection, true);
-        await Promise.all(postMoodle.map(async (element: postQuery)=>{
-            let theQuery = `
-            mutation createPost{
-                createPost(classroomId: ${theData.idClassroom}, input: {
-                    active: true,
-                    backgroundId: 0,
-                    category: 0,
-                    classroomId: ${theData.idClassroom},
-                    description: "${element.description}",
-                    isVideo: false,
-                    option: "options",
-                    privacy: false,
-                    url: "url_test",
-                    userId: ${theData.idUser}
-                }){
-                    id
-                }
-            }`;
-            const data = JSON.stringify({ query: `${theQuery}`});
-            const result =  await fetchApi(data);
-        }));
-        console.log("post");
         */
+        //TASKGROUP 
+        let groupsMoodle = yield CallGroups_1.callGroupFromMoodle(connection, true);
+        yield Promise.all(groupsMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
+            let theQuery = `
+        mutation createTaskGroup{ 
+            createTaskGroup (classroomId: ${theData.idClassroom},, input:{
+                members: "options", 
+                name: "${element.name}",
+                roomId: ${theData.idRoom},
+                userId: ${theData.idUser}
+            }) {
+                name
+            }
+        }`;
+            const data = JSON.stringify({ query: `${theQuery}` });
+            const result = yield fetchApi_1.fetchApi(data);
+        })));
+        console.log("task_group");
+        // POST 
+        let postMoodle = yield CallPost_1.callPostFromMoodle(connection, true);
+        yield Promise.all(postMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
+            let theQuery = `
+        mutation createPost{
+            createPost(classroomId: ${theData.idClassroom}, input: {
+                active: true,
+                backgroundId: 0,
+                category: 0,
+                classroomId: ${theData.idClassroom},
+                description: "${element.description}",
+                isVideo: false,
+                option: "options",
+                privacy: false,
+                url: "url_test",
+                userId: ${theData.idUser}
+            }){
+                id
+            }
+        }`;
+            const data = JSON.stringify({ query: `${theQuery}` });
+            const result = yield fetchApi_1.fetchApi(data);
+        })));
+        console.log("post");
         // EVENT AND USER_EVENT
         let eventMoodle = yield CallEvent_1.callEventFromMoodle(connection, true);
         yield Promise.all(eventMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
@@ -144,25 +141,25 @@ function PostMutations(connection, theData) {
             const eventQuery = JSON.stringify({ query: `${theQuery}` });
             const eventData = yield fetchApi_1.fetchApi(eventQuery);
             const idEvent = eventData['createEvent'].id;
-            console.log("event-1");
+            /*
             let theQuery2 = `
-        mutation createUserEvent{
-            createUserEvent(classroomId: ${theData.idClassroom}, input:{
-                calendarId: ${theData.idCalendar},
-                eventId: ${idEvent},
-                options: "options", 
-                permissionEvent: "permissionEvent_test",
-                userId: ${theData.idUser}
-            }) {
-                id
-            }
-        }`;
+            mutation createUserEvent{
+                createUserEvent(classroomId: ${theData.idClassroom}, input:{
+                    calendarId: ${theData.idCalendar},
+                    eventId: ${idEvent},
+                    options: "options",
+                    permissionEvent: "permissionEvent_test",
+                    userId: ${theData.idUser}
+                }) {
+                    id
+                }
+            }`;
             console.log(theQuery2);
-            const userEventQuery = JSON.stringify({ query: `${theQuery2}` });
-            const userEventData = yield fetchApi_1.fetchApi(userEventQuery);
-            console.log("user-event-1");
+            const userEventQuery = JSON.stringify({ query: `${theQuery2}`});
+            const userEventData = await fetchApi(userEventQuery);
+            */
         })));
-        console.log("event_user_event");
+        console.log("event");
         connection.end();
     });
 }

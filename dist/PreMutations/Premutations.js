@@ -189,15 +189,13 @@ function preMutations(connection, dataUser, teachers) {
         // CONTENT AND CHAPTER
         let results = yield CallCourses_1.callCourseFromMoodle(connection, true);
         yield Promise.all(results.map((element) => __awaiter(this, void 0, void 0, function* () {
-            if (element.summary == "")
-                element.summary = "description_test";
             let idContentTemp;
             let contentMutation = `
       mutation createContent{
         createContent(classroomId: ${theData.idClassroom}, input: {
           category: 1,
           contentgroupId: ${theData.idContentGroup},
-          description: "${element.summary}",
+          description: "${element.fullname}",
           hidden: false,
           name: "${element.fullname}",
           options: "options", 

@@ -1,6 +1,6 @@
 import { teacher } from '../Intefaces/theInterfaces';
 
-export function callTeacherFromMoodle(connection: any): Promise<string>{
+export function callTeacherFromMoodle(connection: any, hasPrefix: boolean): Promise<string>{
   return new Promise((resolve, reject) => {
     connection.query(`
       SELECT CONCAT(firstname,' ',lastname) as name
