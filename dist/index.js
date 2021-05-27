@@ -10,9 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mysql = require('mysql');
-const Premutations_1 = require("./PreMutations/Premutations");
-const CallTeachers_1 = require("./callHelpers/CallTeachers");
-const CallUserMoodle_1 = require("./callHelpers/CallUserMoodle");
 const PostMutations_1 = require("./PostMutations/PostMutations");
 let database_name = 'moodle';
 const connection = mysql.createConnection({
@@ -36,10 +33,24 @@ connection.query(`
     if (err)
         console.log('error');
     if (results.length == 0) {
-        let dataUser = yield CallUserMoodle_1.callUserFromMoodle(connection, true);
-        let teachers = yield CallTeachers_1.callTeacherFromMoodle(connection);
-        let premutationsIds = yield Premutations_1.preMutations(connection, dataUser, teachers);
-        PostMutations_1.PostMutations(connection, premutationsIds);
+        /*
+        let dataUser: User = await callUserFromMoodle(connection, true);
+        let teachers: string = await callTeacherFromMoodle(connection);
+        let premutationsIds: premutationsIds = await preMutations(connection, dataUser, teachers);
+        */
+        let myData = {
+            idClassroom: '7',
+            idService: '58',
+            idContentGroup: '46',
+            idsContent: [{ id: 66, name: 'Demo Moodle' }, { id: 67, name: 'Tesis 5' }],
+            idsChapter: [{ id: 64, name: 'Demo Moodle' }, { id: 65, name: 'Tesis 5' }],
+            idRoom: '38',
+            idUser: '6',
+            idGroup: '32',
+            idSubGroup: '33',
+            idCalendar: '63'
+        };
+        PostMutations_1.PostMutations(connection, myData);
     }
     else {
         console.log("Without prefix");

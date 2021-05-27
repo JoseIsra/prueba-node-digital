@@ -52,7 +52,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test_32",
+            name: "service_test_33",
             paymentMethods: "payment_test",
             previewVideo: "previewVideo_test",
             pricing: "pricing_test",
@@ -203,7 +203,6 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     await Promise.all(results.map(async (element: Course)=>{
       if(element.summary == "") element.summary = "description_test";
       let idContentTemp: string; 
-      //let options = JSON.stringify(element);
 
       let contentMutation = `
       mutation createContent{
@@ -246,7 +245,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
       const chapterData = await fetchApi(chapterQuery);
       theData.idsChapter.push(chapterData['createChapter']);
     }));
-    
+        
     return theData;
 }
 

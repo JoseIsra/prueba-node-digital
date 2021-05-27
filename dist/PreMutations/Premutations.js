@@ -58,7 +58,7 @@ function preMutations(connection, dataUser, teachers) {
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test_32",
+            name: "service_test_33",
             paymentMethods: "payment_test",
             previewVideo: "previewVideo_test",
             pricing: "pricing_test",
@@ -192,7 +192,6 @@ function preMutations(connection, dataUser, teachers) {
             if (element.summary == "")
                 element.summary = "description_test";
             let idContentTemp;
-            //let options = JSON.stringify(element);
             let contentMutation = `
       mutation createContent{
         createContent(classroomId: ${theData.idClassroom}, input: {

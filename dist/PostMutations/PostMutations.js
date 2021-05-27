@@ -11,119 +11,125 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostMutations = void 0;
 const fetchApi_1 = require("../API/fetchApi");
-const CallQuestions_1 = require("../callHelpers/CallQuestions");
-const CallAssign_1 = require("../callHelpers/CallAssign");
-const CallGroups_1 = require("../callHelpers/CallGroups");
-const CallPost_1 = require("../callHelpers/CallPost");
 const CallEvent_1 = require("../callHelpers/CallEvent");
 function PostMutations(connection, theData) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(theData);
+        /*
         //QUESTIONS
-        let questionMoodle = yield CallQuestions_1.callQuestionsFromMoodle(connection, true);
-        questionMoodle.forEach((element) => __awaiter(this, void 0, void 0, function* () {
-            theData.idsChapter.forEach((theChapter) => __awaiter(this, void 0, void 0, function* () {
-                if (theChapter.name == element.courseName) {
+        let questionMoodle =  await callQuestionsFromMoodle(connection, true);
+        await Promise.all(questionMoodle.map(async (element: questionQuery)=>{
+            await Promise.all(theData.idsChapter.map(async (theChapter: loopOfIds)=>{
+                if(theChapter.name == element.courseName){
                     let theQuery = `
-                mutation createQuestion{
-                    createQuestion(classroomId: ${theData.idClassroom}, input:{
-                        active: 1,
-                        alternatives: "alternatives_test",
-                        answer: "${element.answer}",
-                        chapterId: ${theChapter.id},
-                        hints: "${element.hint}",
-                        level: 1,
-                        order: 1,
-                        size: ${element.length},
-                        statement: "${element.statement}",
-                        statementUrl: "statementUrl_test",
-                        type: ${element.type}
-                    }) {
-                        id
-                    }
-                }`;
-                    const data = JSON.stringify({ query: `${theQuery}` });
-                    const result = yield fetchApi_1.fetchApi(data);
+                    mutation createQuestion{
+                        createQuestion(classroomId: ${theData.idClassroom}, input:{
+                            active: 1,
+                            alternatives: "alternatives_test",
+                            answer: "${element.answer}",
+                            chapterId: ${theChapter.id},
+                            hints: "${element.hint}",
+                            level: 1,
+                            order: 1,
+                            size: ${element.length},
+                            statement: "${element.statement}",
+                            statementUrl: "statementUrl_test",
+                            type: ${element.type}
+                        }) {
+                            id
+                        }
+                    }`;
+                    const data = JSON.stringify({ query: `${theQuery}`});
+                    const result =  await fetchApi(data);
                 }
             }));
         }));
         console.log("questions");
-        //SINGLE TASK 
-        let assignMoodle = yield CallAssign_1.callAssignFromMoodle(connection, true);
-        assignMoodle.forEach((element) => __awaiter(this, void 0, void 0, function* () {
-            theData.idsContent.forEach((theContent) => __awaiter(this, void 0, void 0, function* () {
-                if (theContent.name == element.courseName) {
+    
+        
+        //SINGLE TASK
+        let assignMoodle = await callAssignFromMoodle(connection, true);
+        console.log(assignMoodle);
+        await Promise.all(assignMoodle.map(async (element: singleTaskQuery)=>{
+            await Promise.all(theData.idsContent.map(async (theContent: loopOfIds)=>{
+                if(theContent.name == element.courseName){
                     let theQuery = `
-                mutation createSingletask{
-                    createSingletask(classroomId: ${theData.idClassroom}, input:{
-                        active: true,
-                        contentId: ${theContent.id},
-                        endDate: "${element.endDate}",
-                        hidden: false,
-                        initDate: "${element.initDate}",
-                        membersAll: true,
-                        roomId: ${theData.idRoom},
-                        scoreMicrotemplate: 1,
-                        scoreSubtemplate: 1,
-                        scoreTemplate: 1,
-                        title: "${element.title}",
-                        typeId: 1,
-                        userId: ${theData.idUser}
-                    }) {
-                        id
-                    }
-                }`;
-                    const data = JSON.stringify({ query: `${theQuery}` });
-                    const result = yield fetchApi_1.fetchApi(data);
+                    mutation createSingletask{
+                        createSingletask(classroomId: ${theData.idClassroom}, input:{
+                            active: true,
+                            contentId: ${theContent.id},
+                            endDate: "${element.endDate}",
+                            hidden: false,
+                            initDate: "${element.initDate}",
+                            membersAll: true,
+                            roomId: ${theData.idRoom},
+                            scoreMicrotemplate: 1,
+                            scoreSubtemplate: 1,
+                            scoreTemplate: 1,
+                            title: "${element.title}",
+                            typeId: 1,
+                            userId: ${theData.idUser}
+                        }) {
+                            id
+                        }
+                    }`;
+                    console.log(theQuery);
+                    const data = JSON.stringify({ query: `${theQuery}`});
+                    const result =  await fetchApi(data);
                 }
             }));
         }));
         console.log("single_task");
-        //TASKGROUP 
-        let groupsMoodle = yield CallGroups_1.callGroupFromMoodle(connection, true);
-        groupsMoodle.forEach((element) => __awaiter(this, void 0, void 0, function* () {
+        
+        
+        //TASKGROUP
+        let groupsMoodle = await callGroupFromMoodle(connection, true);
+        await Promise.all(groupsMoodle.map(async (element: taskGroupQuery)=>{
             let theQuery = `
-        mutation createTaskGroup{ 
-            createTaskGroup (classroomId: ${theData.idClassroom},, input:{
-                members: "options", 
-                name: "${element.name}",
-                roomId: ${theData.idRoom},
-                userId: ${theData.idUser}
-            }) {
-                name
-            }
-        }`;
-            const data = JSON.stringify({ query: `${theQuery}` });
-            const result = yield fetchApi_1.fetchApi(data);
+            mutation createTaskGroup{
+                createTaskGroup (classroomId: ${theData.idClassroom},, input:{
+                    members: "options",
+                    name: "${element.name}",
+                    roomId: ${theData.idRoom},
+                    userId: ${theData.idUser}
+                }) {
+                    name
+                }
+            }`;
+            const data = JSON.stringify({ query: `${theQuery}`});
+            const result =  await fetchApi(data);
         }));
         console.log("task_group");
-        // POST 
-        let postMoodle = yield CallPost_1.callPostFromMoodle(connection, true);
-        postMoodle.forEach((element) => __awaiter(this, void 0, void 0, function* () {
+    
+    
+        // POST
+        let postMoodle = await callPostFromMoodle(connection, true);
+        await Promise.all(postMoodle.map(async (element: postQuery)=>{
             let theQuery = `
-        mutation createPost{
-            createPost(classroomId: ${theData.idClassroom}, input: {
-                active: true,
-                backgroundId: 0,
-                category: 0,
-                classroomId: ${theData.idClassroom},
-                description: "${element.description}",
-                isVideo: false,
-                option: "options",
-                privacy: false,
-                url: "url_test",
-                userId: ${theData.idUser}
-            }){
-                id
-            }
-        }`;
-            const data = JSON.stringify({ query: `${theQuery}` });
-            const result = yield fetchApi_1.fetchApi(data);
+            mutation createPost{
+                createPost(classroomId: ${theData.idClassroom}, input: {
+                    active: true,
+                    backgroundId: 0,
+                    category: 0,
+                    classroomId: ${theData.idClassroom},
+                    description: "${element.description}",
+                    isVideo: false,
+                    option: "options",
+                    privacy: false,
+                    url: "url_test",
+                    userId: ${theData.idUser}
+                }){
+                    id
+                }
+            }`;
+            const data = JSON.stringify({ query: `${theQuery}`});
+            const result =  await fetchApi(data);
         }));
         console.log("post");
+        */
         // EVENT AND USER_EVENT
         let eventMoodle = yield CallEvent_1.callEventFromMoodle(connection, true);
-        eventMoodle.forEach((element) => __awaiter(this, void 0, void 0, function* () {
+        yield Promise.all(eventMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
             let theQuery = `
         mutation createEvent{
             createEvent(classroomId: ${theData.idClassroom}, input: {
@@ -138,6 +144,7 @@ function PostMutations(connection, theData) {
             const eventQuery = JSON.stringify({ query: `${theQuery}` });
             const eventData = yield fetchApi_1.fetchApi(eventQuery);
             const idEvent = eventData['createEvent'].id;
+            console.log("event-1");
             let theQuery2 = `
         mutation createUserEvent{
             createUserEvent(classroomId: ${theData.idClassroom}, input:{
@@ -150,9 +157,11 @@ function PostMutations(connection, theData) {
                 id
             }
         }`;
+            console.log(theQuery2);
             const userEventQuery = JSON.stringify({ query: `${theQuery2}` });
             const userEventData = yield fetchApi_1.fetchApi(userEventQuery);
-        }));
+            console.log("user-event-1");
+        })));
         console.log("event_user_event");
         connection.end();
     });

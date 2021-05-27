@@ -10,10 +10,11 @@ import { callEventFromMoodle } from '../callHelpers/CallEvent';
 export async function PostMutations(connection: any, theData: premutationsIds){
     console.log(theData);
     
+    /*
     //QUESTIONS
     let questionMoodle =  await callQuestionsFromMoodle(connection, true);
-    questionMoodle.forEach( async (element: questionQuery) => {
-        theData.idsChapter.forEach( async (theChapter: loopOfIds) => {
+    await Promise.all(questionMoodle.map(async (element: questionQuery)=>{
+        await Promise.all(theData.idsChapter.map(async (theChapter: loopOfIds)=>{
             if(theChapter.name == element.courseName){
                 let theQuery = `
                 mutation createQuestion{
@@ -36,15 +37,16 @@ export async function PostMutations(connection: any, theData: premutationsIds){
                 const data = JSON.stringify({ query: `${theQuery}`});
                 const result =  await fetchApi(data);
             }
-        })
-    });
+        }));
+    }));
     console.log("questions");
-    
 
+    
     //SINGLE TASK 
     let assignMoodle = await callAssignFromMoodle(connection, true);
-    assignMoodle.forEach(async (element: singleTaskQuery) => {
-        theData.idsContent.forEach( async (theContent: loopOfIds) => {
+    console.log(assignMoodle);
+    await Promise.all(assignMoodle.map(async (element: singleTaskQuery)=>{
+        await Promise.all(theData.idsContent.map(async (theContent: loopOfIds)=>{
             if(theContent.name == element.courseName){
                 let theQuery = `
                 mutation createSingletask{
@@ -66,17 +68,18 @@ export async function PostMutations(connection: any, theData: premutationsIds){
                         id
                     }
                 }`;
+                console.log(theQuery);
                 const data = JSON.stringify({ query: `${theQuery}`});
                 const result =  await fetchApi(data);
             }
-        });
-    });
+        }));
+    }));
     console.log("single_task");
-
-
+    
+    
     //TASKGROUP 
     let groupsMoodle = await callGroupFromMoodle(connection, true);
-    groupsMoodle.forEach(async (element: taskGroupQuery) => {
+    await Promise.all(groupsMoodle.map(async (element: taskGroupQuery)=>{
         let theQuery = `
         mutation createTaskGroup{ 
             createTaskGroup (classroomId: ${theData.idClassroom},, input:{
@@ -90,13 +93,13 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         }`;
         const data = JSON.stringify({ query: `${theQuery}`});
         const result =  await fetchApi(data);
-    });
+    }));
     console.log("task_group");
 
 
     // POST 
     let postMoodle = await callPostFromMoodle(connection, true);
-    postMoodle.forEach(async (element: postQuery) => {
+    await Promise.all(postMoodle.map(async (element: postQuery)=>{
         let theQuery = `
         mutation createPost{
             createPost(classroomId: ${theData.idClassroom}, input: {
@@ -116,13 +119,14 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         }`;
         const data = JSON.stringify({ query: `${theQuery}`});
         const result =  await fetchApi(data);
-    });
+    }));
     console.log("post");
+    */
     
-
+    
     // EVENT AND USER_EVENT
     let eventMoodle = await callEventFromMoodle(connection, true);
-    eventMoodle.forEach( async (element: eventQuery) =>{
+    await Promise.all(eventMoodle.map(async (element: eventQuery)=>{
         let theQuery = `
         mutation createEvent{
             createEvent(classroomId: ${theData.idClassroom}, input: {
@@ -137,6 +141,7 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         const eventQuery = JSON.stringify({ query: `${theQuery}`});
         const eventData = await fetchApi(eventQuery);
         const idEvent = eventData['createEvent'].id;
+        console.log("event-1");
         
         let theQuery2 = `
         mutation createUserEvent{
@@ -150,12 +155,14 @@ export async function PostMutations(connection: any, theData: premutationsIds){
                 id
             }
         }`;
+        console.log(theQuery2);
         const userEventQuery = JSON.stringify({ query: `${theQuery2}`});
         const userEventData = await fetchApi(userEventQuery);
-    });
+        console.log("user-event-1");
+    }));
     console.log("event_user_event");
     
-
+    
     connection.end();
 }
 
