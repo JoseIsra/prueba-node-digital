@@ -16,11 +16,11 @@ const CallGroups_1 = require("../callHelpers/CallGroups");
 const CallPost_1 = require("../callHelpers/CallPost");
 const CallEvent_1 = require("../callHelpers/CallEvent");
 const CallMembers_1 = require("../callHelpers/CallMembers");
-function PostMutations(connection, theData) {
+function PostMutations(connection, theData, hasPrefix, databaseName) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(theData);
         //QUESTIONS
-        let questionMoodle = yield CallQuestions_1.callQuestionsFromMoodle(connection, true);
+        let questionMoodle = yield CallQuestions_1.callQuestionsFromMoodle(connection, hasPrefix, databaseName);
         yield Promise.all(questionMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
             yield Promise.all(theData.idsChapter.map((theChapter) => __awaiter(this, void 0, void 0, function* () {
                 if (theChapter.name == element.courseName) {
@@ -50,7 +50,7 @@ function PostMutations(connection, theData) {
         console.log("questions");
         /*
         //SINGLE TASK
-        let assignMoodle = await callAssignFromMoodle(connection, true);
+        let assignMoodle = await callAssignFromMoodle(connection, hasPrefix, databaseName);
         console.log(assignMoodle);
         await Promise.all(assignMoodle.map(async (element: singleTaskQuery)=>{
             await Promise.all(theData.idsContent.map(async (theContent: loopOfIds)=>{
@@ -84,8 +84,8 @@ function PostMutations(connection, theData) {
         console.log("single_task");
         */
         //TASKGROUP 
-        let groupsMoodle = yield CallGroups_1.callGroupFromMoodle(connection, true);
-        let allMembers = yield CallMembers_1.callGroupMembersFromMoodle(connection, true);
+        let groupsMoodle = yield CallGroups_1.callGroupFromMoodle(connection, hasPrefix, databaseName);
+        let allMembers = yield CallMembers_1.callGroupMembersFromMoodle(connection, hasPrefix, databaseName);
         yield Promise.all(groupsMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
             let theQuery = `
         mutation createTaskGroup{ 
@@ -103,7 +103,7 @@ function PostMutations(connection, theData) {
         })));
         console.log("task_group");
         // POST 
-        let postMoodle = yield CallPost_1.callPostFromMoodle(connection, true);
+        let postMoodle = yield CallPost_1.callPostFromMoodle(connection, hasPrefix, databaseName);
         yield Promise.all(postMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
             let theQuery = `
         mutation createPost{
@@ -127,7 +127,7 @@ function PostMutations(connection, theData) {
         })));
         console.log("post");
         // EVENT AND USER_EVENT
-        let eventMoodle = yield CallEvent_1.callEventFromMoodle(connection, true);
+        let eventMoodle = yield CallEvent_1.callEventFromMoodle(connection, hasPrefix, databaseName);
         yield Promise.all(eventMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
             let theQuery = `
         mutation createEvent{

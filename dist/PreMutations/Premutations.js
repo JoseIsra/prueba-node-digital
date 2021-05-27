@@ -26,10 +26,10 @@ let theData = {
     idSubGroup: "",
     idCalendar: "",
 };
-function preMutations(connection) {
+function preMutations(connection, hasPrefix, databaseName) {
     return __awaiter(this, void 0, void 0, function* () {
-        let dataUser = yield CallUser_1.callUserFromMoodle(connection, true);
-        let teachers = yield CallTeachers_1.callTeacherFromMoodle(connection, true);
+        let dataUser = yield CallUser_1.callUserFromMoodle(connection, hasPrefix, databaseName);
+        let teachers = yield CallTeachers_1.callTeacherFromMoodle(connection, hasPrefix, databaseName);
         /*
         let clasroomMutation = `
           mutation createClassroom{
@@ -191,7 +191,7 @@ function preMutations(connection) {
         console.log(calendarData['createCalendar'].id);
         theData.idCalendar = calendarData['createCalendar'].id;
         // CONTENT AND CHAPTER
-        let results = yield CallCourses_1.callCourseFromMoodle(connection, true);
+        let results = yield CallCourses_1.callCourseFromMoodle(connection, true, databaseName);
         yield Promise.all(results.map((element) => __awaiter(this, void 0, void 0, function* () {
             let idContentTemp;
             let contentMutation = `

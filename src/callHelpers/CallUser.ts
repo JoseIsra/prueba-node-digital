@@ -7,7 +7,7 @@ export function callUserFromMoodle(connection:any , hasPrefix:boolean, databaseN
       connection.query(`
         SELECT firstname, idNUmber*1, lastname, email, phone1, address, imagealt
         FROM mdl_user 
-        where username="admin";`,
+        where id="2";`, //admin
         (err: any, results: User[]) => {
         if (err) throw err;
 

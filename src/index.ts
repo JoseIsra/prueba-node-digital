@@ -3,7 +3,7 @@ import { preMutations } from './PreMutations/Premutations';
 import { PostMutations } from './PostMutations/PostMutations';
 import { premutationsIds } from './Intefaces/theInterfaces';
 
-let databaseName = 'mydb';
+let databaseName = 'moodle';
 
 const connection = mysql.createConnection({
   host     : 'localhost',

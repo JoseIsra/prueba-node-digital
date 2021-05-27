@@ -10,12 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mysql = require('mysql');
-let database_name = 'mydb';
+const Premutations_1 = require("./PreMutations/Premutations");
+const PostMutations_1 = require("./PostMutations/PostMutations");
+let databaseName = 'mydb';
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: `${database_name}`,
+    database: `${databaseName}`,
 });
 connection.connect(function (err) {
     if (err) {
@@ -27,12 +29,11 @@ connection.connect(function (err) {
 connection.query(`
   SELECT *
   FROM information_schema.tables
-  WHERE table_schema = "${database_name}" AND table_name = 'course'
+  WHERE table_schema = "${databaseName}" AND table_name = 'course'
   LIMIT 1;`, (err, results) => __awaiter(void 0, void 0, void 0, function* () {
     if (err)
         console.log('error');
     let hasPrefix = results.length == 0;
-    console.log(hasPrefix);
-    //let premutationsIds: premutationsIds = await preMutations(connection, hasPrefix);
-    //PostMutations(connection, premutationsIds, hasPrefix);
+    let premutationsIds = yield Premutations_1.preMutations(connection, hasPrefix, databaseName);
+    PostMutations_1.PostMutations(connection, premutationsIds, hasPrefix, databaseName);
 }));
