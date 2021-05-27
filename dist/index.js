@@ -33,11 +33,7 @@ connection.query(`
     if (err)
         console.log('error');
     if (results.length == 0) {
-        /*
-        let dataUser: User = await callUserFromMoodle(connection, true);
-        let teachers: string = await callTeacherFromMoodle(connection);
-        let premutationsIds: premutationsIds = await preMutations(connection, dataUser, teachers);
-        */
+        //let premutationsIds: premutationsIds = await preMutations(connection);
         let myData = {
             idClassroom: '7',
             idService: '58',
