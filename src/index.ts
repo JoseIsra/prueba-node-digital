@@ -3,6 +3,7 @@ import { preMutations } from './PreMutations/Premutations';
 import { callTeacherFromMoodle } from './callHelpers/CallTeachers';
 import { callUserFromMoodle } from './callHelpers/CallUserMoodle';
 import { premutationsIds, User } from './Intefaces/theInterfaces';
+import { runPrefix } from './PostMutations/prefix';
 
 let database_name = 'moodle';
 
@@ -34,6 +35,7 @@ connection.query(`
     let dataUser: User = await callUserFromMoodle(connection, true); 
     let teachers: string = await callTeacherFromMoodle(connection);
     let premutationsIds: premutationsIds = await preMutations(connection, dataUser, teachers);
+    runPrefix(connection, premutationsIds);
   }else{
     console.log("Without prefix");
   }

@@ -22,7 +22,6 @@ let theData = {
     idUser: "",
     idGroup: "",
     idSubGroup: "",
-    idEvent: "",
     idCalendar: "",
 };
 function preMutations(connection, dataUser, teachers) {
@@ -59,7 +58,7 @@ function preMutations(connection, dataUser, teachers) {
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test_22",
+            name: "service_test_26",
             paymentMethods: "payment_test",
             previewVideo: "previewVideo_test",
             pricing: "pricing_test",
@@ -188,10 +187,49 @@ function preMutations(connection, dataUser, teachers) {
         console.log(calendarData['createCalendar'].id);
         theData.idCalendar = calendarData['createCalendar'].id;
         // CONTENT AND CHAPTER
-        let chapterNContent = yield CallLoop_1.getLoop(connection, theData.idClassroom, theData.idContentGroup);
-        theData.idsContent = chapterNContent.idContentArray;
-        theData.idsChapter = chapterNContent.idChapterArray;
-        console.log(theData);
+        let results = yield CallLoop_1.getLoop(connection, true);
+        yield Promise.all(results.map((element) => __awaiter(this, void 0, void 0, function* () {
+            if (element.summary == "")
+                element.summary = "description_test";
+            let idContentTemp;
+            //let options = JSON.stringify(element);
+            let contentMutation = `
+      mutation createContent{
+        createContent(classroomId: ${theData.idClassroom}, input: {
+          category: 1,
+          contentgroupId: ${theData.idContentGroup},
+          description: "${element.summary}",
+          hidden: false,
+          name: "${element.fullname}",
+          options: "options", 
+          order: 1,
+          url: "url_test",
+          }){
+              id,
+              name
+          }
+      }`;
+            const contentQuery = JSON.stringify({ query: `${contentMutation}` });
+            const contentData = yield fetchApi_1.fetchApi(contentQuery);
+            theData.idsContent.push(contentData['createContent']);
+            idContentTemp = contentData['createContent'].id;
+            let chapterMutation = `
+      mutation createChapter{
+          createChapter(classroomId: ${theData.idClassroom}, input: {
+              contentId: ${idContentTemp},
+              hidden: 1,
+              name: "${element.fullname}",
+              option: "options", 
+              order: 1
+              }){
+                  id,
+                  name
+              }
+      }`;
+            const chapterQuery = JSON.stringify({ query: `${chapterMutation}` });
+            const chapterData = yield fetchApi_1.fetchApi(chapterQuery);
+            theData.idsChapter.push(chapterData['createChapter']);
+        })));
         return theData;
     });
 }

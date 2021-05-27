@@ -13,6 +13,7 @@ const mysql = require('mysql');
 const Premutations_1 = require("./PreMutations/Premutations");
 const CallTeachers_1 = require("./callHelpers/CallTeachers");
 const CallUserMoodle_1 = require("./callHelpers/CallUserMoodle");
+const prefix_1 = require("./PostMutations/prefix");
 let database_name = 'moodle';
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -38,6 +39,7 @@ connection.query(`
         let dataUser = yield CallUserMoodle_1.callUserFromMoodle(connection, true);
         let teachers = yield CallTeachers_1.callTeacherFromMoodle(connection);
         let premutationsIds = yield Premutations_1.preMutations(connection, dataUser, teachers);
+        prefix_1.runPrefix(connection, premutationsIds);
     }
     else {
         console.log("Without prefix");

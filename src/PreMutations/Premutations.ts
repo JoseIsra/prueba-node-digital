@@ -1,7 +1,6 @@
 import { getLoop } from '../callHelpers/CallLoop';
-import { premutationsIds, User } from '../Intefaces/theInterfaces';
+import { premutationsIds, User, loopOfIds, Course } from '../Intefaces/theInterfaces';
 import { fetchApi } from '../API/fetchApi';
-import { loopOfIds } from '../Intefaces/theInterfaces';
 
 let theData = {
   idClassroom: "",
@@ -13,7 +12,6 @@ let theData = {
   idUser: "",
   idGroup: "",
   idSubGroup: "",
-  idEvent: "",
   idCalendar: "",
 };
 
@@ -44,6 +42,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     // HARDCODING 
     theData.idClassroom = "7"; 
 
+    
     //SERVICE
     let serviceMutation = `
     mutation createService{
@@ -53,7 +52,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test_22",
+            name: "service_test_26",
             paymentMethods: "payment_test",
             previewVideo: "previewVideo_test",
             pricing: "pricing_test",
@@ -84,6 +83,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     const contentgroupData = await fetchApi(contentGroupQuery);
     console.log(contentgroupData['createContentgroup'].id);
     theData.idContentGroup = contentgroupData['createContentgroup'].id;
+    
 
     /*
     // USER
@@ -108,6 +108,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     */
     theData.idUser = "6"; // fu.vargas.les.ter@gmail.com
 
+    
     // GROUP
     let groupMutation =`
     mutation createGroup{
@@ -195,17 +196,57 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     const calendarData = await fetchApi(calendarQuery);
     console.log(calendarData['createCalendar'].id);
     theData.idCalendar = calendarData['createCalendar'].id;
-    
-
-    
+       
     // CONTENT AND CHAPTER
-    let chapterNContent = await getLoop(connection, theData.idClassroom, theData.idContentGroup);
-    theData.idsContent = chapterNContent.idContentArray;    
-    theData.idsChapter = chapterNContent.idChapterArray;
+    let results: Course[] = await getLoop(connection, true);
     
-    
-    console.log(theData);
+    await Promise.all(results.map(async (element: Course)=>{
+      if(element.summary == "") element.summary = "description_test";
+      let idContentTemp: string; 
+      //let options = JSON.stringify(element);
 
+      let contentMutation = `
+      mutation createContent{
+        createContent(classroomId: ${theData.idClassroom}, input: {
+          category: 1,
+          contentgroupId: ${theData.idContentGroup},
+          description: "${element.summary}",
+          hidden: false,
+          name: "${element.fullname}",
+          options: "options", 
+          order: 1,
+          url: "url_test",
+          }){
+              id,
+              name
+          }
+      }`;
+      
+      const contentQuery = JSON.stringify({ query: `${contentMutation}`});
+      const contentData = await fetchApi(contentQuery);
+      theData.idsContent.push(contentData['createContent']);
+      idContentTemp = contentData['createContent'].id;
+
+      
+      let chapterMutation = `
+      mutation createChapter{
+          createChapter(classroomId: ${theData.idClassroom}, input: {
+              contentId: ${idContentTemp},
+              hidden: 1,
+              name: "${element.fullname}",
+              option: "options", 
+              order: 1
+              }){
+                  id,
+                  name
+              }
+      }`;
+
+      const chapterQuery = JSON.stringify({ query: `${chapterMutation}`});
+      const chapterData = await fetchApi(chapterQuery);
+      theData.idsChapter.push(chapterData['createChapter']);
+    }));
+    
     return theData;
 }
 

@@ -1,8 +1,9 @@
 import { fetchApi } from '../API/fetchApi';
-import { premutationsIds, questionQuery, singleTaskQuery, taskGroupQuery, postQuery, eventQuery } from '../Intefaces/theInterfaces';
+import { loopOfIds, premutationsIds, questionQuery, singleTaskQuery, taskGroupQuery, postQuery, eventQuery } from '../Intefaces/theInterfaces';
 
 
 export function runPrefix(connection: any, theData: premutationsIds){
+    console.log(theData);
     
     /** QUESTIONS **/
     connection.query(`
@@ -15,14 +16,14 @@ export function runPrefix(connection: any, theData: premutationsIds){
         (err: any, results: questionQuery[]) => {
         if (err) throw err;
 
-        results.forEach( function(element: questionQuery){
-            theData.idsChapter.forEach( theChapter => {
+        results.forEach( async (element: questionQuery) => {
+            theData.idsChapter.forEach( async (theChapter: loopOfIds) => {
                 if(theChapter.name == element.courseName){
                     let theQuery = `
                     mutation createQuestion{
                         createQuestion(classroomId: ${theData.idClassroom}, input:{
                             active: 1,
-                            alternatives: "",
+                            alternatives: "alternatives_test",
                             answer: "${element.answer}",
                             chapterId: ${theChapter.id},
                             hints: "${element.hint}",
@@ -30,14 +31,14 @@ export function runPrefix(connection: any, theData: premutationsIds){
                             order: 1,
                             size: ${element.length},
                             statement: "${element.statement}",
-                            statementUrl: "",
+                            statementUrl: "statementUrl_test",
                             type: ${element.type}
                         }) {
                             answer
                         }
                     }`;
                     const data = JSON.stringify({ query: `${theQuery}`});
-                    console.log(theQuery);
+                    const result =  await fetchApi(data);
                 }
             })
         });
@@ -52,8 +53,8 @@ export function runPrefix(connection: any, theData: premutationsIds){
         (err: any, results: singleTaskQuery[]) => {
         if (err) throw err;
 
-        results.forEach(function(element: singleTaskQuery){
-            theData.idsContent.forEach( theContent => {
+        results.forEach(async (element: singleTaskQuery) => {
+            theData.idsContent.forEach( async (theContent: loopOfIds) => {
                 if(theContent.name == element.courseName){
                     let theQuery = `
                     mutation createSingletask{
@@ -72,11 +73,11 @@ export function runPrefix(connection: any, theData: premutationsIds){
                             typeId: 1,
                             userId: ${theData.idUser}
                         }) {
-                            name
+                            title
                         }
                     }`;
                     const data = JSON.stringify({ query: `${theQuery}`});
-                    console.log(theQuery);
+                    const result =  await fetchApi(data);
                 }
             });
         });
@@ -89,7 +90,7 @@ export function runPrefix(connection: any, theData: premutationsIds){
         (err: any, results: taskGroupQuery[]) => {
         if (err) throw err;
 
-        results.forEach(function(element: taskGroupQuery){
+        results.forEach(async (element: taskGroupQuery) => {
             let theQuery = `
             mutation createTaskGroup{ 
                 createTaskGroup (classroomId: ${theData.idClassroom},, input:{
@@ -102,7 +103,7 @@ export function runPrefix(connection: any, theData: premutationsIds){
                 }
             }`;
             const data = JSON.stringify({ query: `${theQuery}`});
-            console.log(theQuery);
+            const result =  await fetchApi(data);
         });
     });
 
@@ -115,7 +116,7 @@ export function runPrefix(connection: any, theData: premutationsIds){
         (err: any, results: postQuery[]) => {
         if (err) throw err;
 
-        results.forEach(function(element: postQuery){
+        results.forEach(async (element: postQuery) => {
         let theQuery = `
             mutation createPost{
                 createPost(classroomId: ${theData.idClassroom}, input: {
@@ -125,15 +126,16 @@ export function runPrefix(connection: any, theData: premutationsIds){
                     classroomId: ${theData.idClassroom},
                     description: "${element.description}",
                     isVideo: false,
+                    option: "options",
                     privacy: false,
                     url: "url_test",
-                    userid: ${theData.idUser}
+                    userId: ${theData.idUser}
                 }){
                     description
                 }
             }`;
             const data = JSON.stringify({ query: `${theQuery}`});
-            console.log(theQuery);
+            const result =  await fetchApi(data);
         });
     });
 
@@ -143,14 +145,14 @@ export function runPrefix(connection: any, theData: premutationsIds){
         (err: any, results: eventQuery[]) => {
         if (err) throw err;
         
-        results.forEach( async function(element: eventQuery){
+        results.forEach( async (element: eventQuery) =>{
             let theQuery = `
             mutation createEvent{
                 createEvent(classroomId: ${theData.idClassroom}, input: {
                     calendarId: ${theData.idCalendar},
                     data: "${element.description}",
-                    options: "${JSON.stringify(element)}", 
-                    schedule: "",
+                    options: "options", 
+                    schedule: "schedule_test",
                 }){
                     id
                 }
@@ -164,8 +166,8 @@ export function runPrefix(connection: any, theData: premutationsIds){
                 createUserEvent(classroomId: ${theData.idClassroom}, input:{
                     calendarId: ${theData.idCalendar},
                     eventId: ${idEvent},
-                    options: "${JSON.stringify(element)}", 
-                    permissionEvent: "",
+                    options: "options", 
+                    permissionEvent: "permissionEvent_test",
                     userid: ${theData.idUser}
                 }) {
                     id

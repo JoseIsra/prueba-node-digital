@@ -8,7 +8,6 @@ export interface premutationsIds{
     idUser: string;
     idGroup: string;
     idSubGroup: string;
-    idEvent: string
     idCalendar: string;
 }
 

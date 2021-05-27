@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.runPrefix = void 0;
 const fetchApi_1 = require("../API/fetchApi");
 function runPrefix(connection, theData) {
+    console.log(theData);
     /** QUESTIONS **/
     connection.query(`
         SELECT questiontext as statement,hint, answer, length, (mmq.qtype*1) as type, mmc.fullname as courseName
@@ -22,14 +23,14 @@ function runPrefix(connection, theData) {
         INNER JOIN mdl_course mmc ON mmc.id = mmz.course;`, (err, results) => {
         if (err)
             throw err;
-        results.forEach(function (element) {
-            theData.idsChapter.forEach(theChapter => {
+        results.forEach((element) => __awaiter(this, void 0, void 0, function* () {
+            theData.idsChapter.forEach((theChapter) => __awaiter(this, void 0, void 0, function* () {
                 if (theChapter.name == element.courseName) {
                     let theQuery = `
                     mutation createQuestion{
                         createQuestion(classroomId: ${theData.idClassroom}, input:{
                             active: 1,
-                            alternatives: "",
+                            alternatives: "alternatives_test",
                             answer: "${element.answer}",
                             chapterId: ${theChapter.id},
                             hints: "${element.hint}",
@@ -37,17 +38,17 @@ function runPrefix(connection, theData) {
                             order: 1,
                             size: ${element.length},
                             statement: "${element.statement}",
-                            statementUrl: "",
+                            statementUrl: "statementUrl_test",
                             type: ${element.type}
                         }) {
                             answer
                         }
                     }`;
                     const data = JSON.stringify({ query: `${theQuery}` });
-                    console.log(theQuery);
+                    const result = yield fetchApi_1.fetchApi(data);
                 }
-            });
-        });
+            }));
+        }));
     });
     /** SINGLE TASK **/
     connection.query(`
@@ -57,8 +58,8 @@ function runPrefix(connection, theData) {
         INNER JOIN mdl_course mmc ON mma.course = mmc.id ;`, (err, results) => {
         if (err)
             throw err;
-        results.forEach(function (element) {
-            theData.idsContent.forEach(theContent => {
+        results.forEach((element) => __awaiter(this, void 0, void 0, function* () {
+            theData.idsContent.forEach((theContent) => __awaiter(this, void 0, void 0, function* () {
                 if (theContent.name == element.courseName) {
                     let theQuery = `
                     mutation createSingletask{
@@ -77,14 +78,14 @@ function runPrefix(connection, theData) {
                             typeId: 1,
                             userId: ${theData.idUser}
                         }) {
-                            name
+                            title
                         }
                     }`;
                     const data = JSON.stringify({ query: `${theQuery}` });
-                    console.log(theQuery);
+                    const result = yield fetchApi_1.fetchApi(data);
                 }
-            });
-        });
+            }));
+        }));
     });
     /** TASKGROUP **/
     connection.query(`
@@ -92,7 +93,7 @@ function runPrefix(connection, theData) {
         FROM mdl_groups;`, (err, results) => {
         if (err)
             throw err;
-        results.forEach(function (element) {
+        results.forEach((element) => __awaiter(this, void 0, void 0, function* () {
             let theQuery = `
             mutation createTaskGroup{ 
                 createTaskGroup (classroomId: ${theData.idClassroom},, input:{
@@ -105,8 +106,8 @@ function runPrefix(connection, theData) {
                 }
             }`;
             const data = JSON.stringify({ query: `${theQuery}` });
-            console.log(theQuery);
-        });
+            const result = yield fetchApi_1.fetchApi(data);
+        }));
     });
     /** POST **/
     connection.query(`
@@ -114,7 +115,7 @@ function runPrefix(connection, theData) {
         FROM mdl_post;`, (err, results) => {
         if (err)
             throw err;
-        results.forEach(function (element) {
+        results.forEach((element) => __awaiter(this, void 0, void 0, function* () {
             let theQuery = `
             mutation createPost{
                 createPost(classroomId: ${theData.idClassroom}, input: {
@@ -124,54 +125,53 @@ function runPrefix(connection, theData) {
                     classroomId: ${theData.idClassroom},
                     description: "${element.description}",
                     isVideo: false,
+                    option: "options",
                     privacy: false,
                     url: "url_test",
-                    userid: ${theData.idUser}
+                    userId: ${theData.idUser}
                 }){
                     description
                 }
             }`;
             const data = JSON.stringify({ query: `${theQuery}` });
-            console.log(theQuery);
-        });
+            const result = yield fetchApi_1.fetchApi(data);
+        }));
     });
     /** EVENT AND USER_EVENT**/
     connection.query(`
         SELECT * FROM mdl_event;`, (err, results) => {
         if (err)
             throw err;
-        results.forEach(function (element) {
-            return __awaiter(this, void 0, void 0, function* () {
-                let theQuery = `
+        results.forEach((element) => __awaiter(this, void 0, void 0, function* () {
+            let theQuery = `
             mutation createEvent{
                 createEvent(classroomId: ${theData.idClassroom}, input: {
                     calendarId: ${theData.idCalendar},
                     data: "${element.description}",
-                    options: "${JSON.stringify(element)}", 
-                    schedule: "",
+                    options: "options", 
+                    schedule: "schedule_test",
                 }){
                     id
                 }
             }`;
-                const eventQuery = JSON.stringify({ query: `${theQuery}` });
-                const eventData = yield fetchApi_1.fetchApi(eventQuery);
-                const idEvent = eventData['createEvent'].id;
-                let theQuery2 = `
+            const eventQuery = JSON.stringify({ query: `${theQuery}` });
+            const eventData = yield fetchApi_1.fetchApi(eventQuery);
+            const idEvent = eventData['createEvent'].id;
+            let theQuery2 = `
             mutation createUserEvent{
                 createUserEvent(classroomId: ${theData.idClassroom}, input:{
                     calendarId: ${theData.idCalendar},
                     eventId: ${idEvent},
-                    options: "${JSON.stringify(element)}", 
-                    permissionEvent: "",
+                    options: "options", 
+                    permissionEvent: "permissionEvent_test",
                     userid: ${theData.idUser}
                 }) {
                     id
                 }
             }`;
-                const userEventQuery = JSON.stringify({ query: `${theQuery2}` });
-                const userEventData = yield fetchApi_1.fetchApi(userEventQuery);
-            });
-        });
+            const userEventQuery = JSON.stringify({ query: `${theQuery2}` });
+            const userEventData = yield fetchApi_1.fetchApi(userEventQuery);
+        }));
     });
     connection.end();
 }
