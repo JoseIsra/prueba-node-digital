@@ -1,4 +1,4 @@
-import { getLoop } from '../callHelpers/CallLoop';
+import { callCourseFromMoodle } from '../callHelpers/CallCourses';
 import { premutationsIds, User, loopOfIds, Course } from '../Intefaces/theInterfaces';
 import { fetchApi } from '../API/fetchApi';
 
@@ -52,7 +52,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test_26",
+            name: "service_test_32",
             paymentMethods: "payment_test",
             previewVideo: "previewVideo_test",
             pricing: "pricing_test",
@@ -198,7 +198,7 @@ export async function preMutations(connection: any, dataUser:User, teachers: str
     theData.idCalendar = calendarData['createCalendar'].id;
        
     // CONTENT AND CHAPTER
-    let results: Course[] = await getLoop(connection, true);
+    let results: Course[] = await callCourseFromMoodle(connection, true);
     
     await Promise.all(results.map(async (element: Course)=>{
       if(element.summary == "") element.summary = "description_test";

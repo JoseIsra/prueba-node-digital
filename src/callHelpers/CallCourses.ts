@@ -1,6 +1,6 @@
 import { Course } from '../Intefaces/theInterfaces';
 
-export function getLoop(connection: any, hasPrefix: boolean): Promise<Course[]> {
+export function callCourseFromMoodle(connection: any, hasPrefix: boolean): Promise<Course[]> {
 
     return new Promise( function (resolve,reject) {
         connection.query(`

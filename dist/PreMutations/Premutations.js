@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.preMutations = void 0;
-const CallLoop_1 = require("../callHelpers/CallLoop");
+const CallCourses_1 = require("../callHelpers/CallCourses");
 const fetchApi_1 = require("../API/fetchApi");
 let theData = {
     idClassroom: "",
@@ -58,7 +58,7 @@ function preMutations(connection, dataUser, teachers) {
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test_26",
+            name: "service_test_32",
             paymentMethods: "payment_test",
             previewVideo: "previewVideo_test",
             pricing: "pricing_test",
@@ -187,7 +187,7 @@ function preMutations(connection, dataUser, teachers) {
         console.log(calendarData['createCalendar'].id);
         theData.idCalendar = calendarData['createCalendar'].id;
         // CONTENT AND CHAPTER
-        let results = yield CallLoop_1.getLoop(connection, true);
+        let results = yield CallCourses_1.callCourseFromMoodle(connection, true);
         yield Promise.all(results.map((element) => __awaiter(this, void 0, void 0, function* () {
             if (element.summary == "")
                 element.summary = "description_test";
