@@ -10,7 +10,7 @@ import { callEventFromMoodle } from '../callHelpers/CallEvent';
 export async function PostMutations(connection: any, theData: premutationsIds){
     console.log(theData);
     
-    /*
+    
     //QUESTIONS
     let questionMoodle =  await callQuestionsFromMoodle(connection, true);
     await Promise.all(questionMoodle.map(async (element: questionQuery)=>{
@@ -41,7 +41,7 @@ export async function PostMutations(connection: any, theData: premutationsIds){
     }));
     console.log("questions");
 
-    
+    /*
     //SINGLE TASK 
     let assignMoodle = await callAssignFromMoodle(connection, true);
     console.log(assignMoodle);
@@ -75,7 +75,7 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         }));
     }));
     console.log("single_task");
-    
+    */
     
     //TASKGROUP 
     let groupsMoodle = await callGroupFromMoodle(connection, true);
@@ -121,7 +121,7 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         const result =  await fetchApi(data);
     }));
     console.log("post");
-    */
+    
     
     
     // EVENT AND USER_EVENT
@@ -141,8 +141,8 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         const eventQuery = JSON.stringify({ query: `${theQuery}`});
         const eventData = await fetchApi(eventQuery);
         const idEvent = eventData['createEvent'].id;
-        console.log("event-1");
         
+        /*
         let theQuery2 = `
         mutation createUserEvent{
             createUserEvent(classroomId: ${theData.idClassroom}, input:{
@@ -158,9 +158,9 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         console.log(theQuery2);
         const userEventQuery = JSON.stringify({ query: `${theQuery2}`});
         const userEventData = await fetchApi(userEventQuery);
-        console.log("user-event-1");
+        */
     }));
-    console.log("event_user_event");
+    console.log("event");
     
     
     connection.end();

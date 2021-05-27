@@ -1,6 +1,8 @@
 import { callCourseFromMoodle } from '../callHelpers/CallCourses';
 import { premutationsIds, User, loopOfIds, Course } from '../Intefaces/theInterfaces';
 import { fetchApi } from '../API/fetchApi';
+import { callUserFromMoodle } from '../callHelpers/CallUser';
+import { callTeacherFromMoodle } from '../callHelpers/CallTeachers';
 
 let theData = {
   idClassroom: "",
@@ -15,8 +17,11 @@ let theData = {
   idCalendar: "",
 };
 
-export async function preMutations(connection: any, dataUser:User, teachers: string): Promise<premutationsIds>{
+export async function preMutations(connection: any): Promise<premutationsIds>{
     
+  let dataUser: User = await callUserFromMoodle(connection, true);
+  let teachers: string = await callTeacherFromMoodle(connection, true);
+
   /*
   let clasroomMutation = `
     mutation createClassroom{

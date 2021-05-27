@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.callTeacherFromMoodle = void 0;
-function callTeacherFromMoodle(connection) {
+function callTeacherFromMoodle(connection, hasPrefix) {
     return new Promise((resolve, reject) => {
         connection.query(`
       SELECT CONCAT(firstname,' ',lastname) as name

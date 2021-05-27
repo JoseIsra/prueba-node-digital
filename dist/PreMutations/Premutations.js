@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.preMutations = void 0;
 const CallCourses_1 = require("../callHelpers/CallCourses");
 const fetchApi_1 = require("../API/fetchApi");
+const CallUser_1 = require("../callHelpers/CallUser");
+const CallTeachers_1 = require("../callHelpers/CallTeachers");
 let theData = {
     idClassroom: "",
     idService: "",
@@ -24,8 +26,10 @@ let theData = {
     idSubGroup: "",
     idCalendar: "",
 };
-function preMutations(connection, dataUser, teachers) {
+function preMutations(connection) {
     return __awaiter(this, void 0, void 0, function* () {
+        let dataUser = yield CallUser_1.callUserFromMoodle(connection, true);
+        let teachers = yield CallTeachers_1.callTeacherFromMoodle(connection, true);
         /*
         let clasroomMutation = `
           mutation createClassroom{
@@ -189,15 +193,13 @@ function preMutations(connection, dataUser, teachers) {
         // CONTENT AND CHAPTER
         let results = yield CallCourses_1.callCourseFromMoodle(connection, true);
         yield Promise.all(results.map((element) => __awaiter(this, void 0, void 0, function* () {
-            if (element.summary == "")
-                element.summary = "description_test";
             let idContentTemp;
             let contentMutation = `
       mutation createContent{
         createContent(classroomId: ${theData.idClassroom}, input: {
           category: 1,
           contentgroupId: ${theData.idContentGroup},
-          description: "${element.summary}",
+          description: "${element.fullname}",
           hidden: false,
           name: "${element.fullname}",
           options: "options", 
