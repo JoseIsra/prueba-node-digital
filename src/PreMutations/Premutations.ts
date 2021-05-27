@@ -216,7 +216,7 @@ export async function preMutations(connection: any): Promise<premutationsIds>{
           description: "${element.fullname}",
           hidden: false,
           name: "${element.fullname}",
-          options: "options", 
+          options: "${element.options}", 
           order: 1,
           url: "url_test",
           }){
@@ -237,7 +237,7 @@ export async function preMutations(connection: any): Promise<premutationsIds>{
               contentId: ${idContentTemp},
               hidden: 1,
               name: "${element.fullname}",
-              option: "options", 
+              option: "${element.options}", 
               order: 1
               }){
                   id,

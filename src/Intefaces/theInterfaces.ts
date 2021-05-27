@@ -37,11 +37,13 @@ export interface taskGroupQuery{
 }
 
 export interface postQuery{
-    description: string;
+  options:string;
+  summary: string;
 }
 
 export interface eventQuery{
-    description: string;
+  name:string;
+  options: string;
 }
 
 export interface ChapterNContent {

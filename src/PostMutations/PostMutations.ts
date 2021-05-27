@@ -5,7 +5,7 @@ import { callAssignFromMoodle } from '../callHelpers/CallAssign';
 import { callGroupFromMoodle } from '../callHelpers/CallGroups';
 import { callPostFromMoodle } from '../callHelpers/CallPost';
 import { callEventFromMoodle } from '../callHelpers/CallEvent';
-
+import { callGroupMembersFromMoodle } from '../callHelpers/CallMembers';
 
 export async function PostMutations(connection: any, theData: premutationsIds){
     console.log(theData);
@@ -79,11 +79,12 @@ export async function PostMutations(connection: any, theData: premutationsIds){
     
     //TASKGROUP 
     let groupsMoodle = await callGroupFromMoodle(connection, true);
+    let allMembers = await callGroupMembersFromMoodle(connection, true);
     await Promise.all(groupsMoodle.map(async (element: taskGroupQuery)=>{
         let theQuery = `
         mutation createTaskGroup{ 
             createTaskGroup (classroomId: ${theData.idClassroom},, input:{
-                members: "options", 
+                members: "${allMembers}", 
                 name: "${element.name}",
                 roomId: ${theData.idRoom},
                 userId: ${theData.idUser}
@@ -107,9 +108,9 @@ export async function PostMutations(connection: any, theData: premutationsIds){
                 backgroundId: 0,
                 category: 0,
                 classroomId: ${theData.idClassroom},
-                description: "${element.description}",
+                description: "${element.summary}",
                 isVideo: false,
-                option: "options",
+                option: "${element.options}",
                 privacy: false,
                 url: "url_test",
                 userId: ${theData.idUser}
@@ -131,8 +132,8 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         mutation createEvent{
             createEvent(classroomId: ${theData.idClassroom}, input: {
                 calendarId: ${theData.idCalendar},
-                data: "description_test",
-                options: "options", 
+                data: "${element.name}",
+                options: "${element.options}", 
                 schedule: "schedule_test",
             }){
                 id
