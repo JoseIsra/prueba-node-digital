@@ -17,7 +17,7 @@ let theData = {
   idCalendar: "",
 };
 
-export async function preMutations(connection: any): Promise<premutationsIds>{
+export async function preMutations(connection: any, hasPrefix: boolean, databaseName: string): Promise<premutationsIds>{
     
   let dataUser: User = await callUserFromMoodle(connection, true);
   let teachers: string = await callTeacherFromMoodle(connection, true);
@@ -57,7 +57,7 @@ export async function preMutations(connection: any): Promise<premutationsIds>{
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test_33",
+            name: "service_test_34",
             paymentMethods: "payment_test",
             previewVideo: "previewVideo_test",
             pricing: "pricing_test",

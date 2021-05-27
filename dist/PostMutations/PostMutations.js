@@ -15,6 +15,7 @@ const CallQuestions_1 = require("../callHelpers/CallQuestions");
 const CallGroups_1 = require("../callHelpers/CallGroups");
 const CallPost_1 = require("../callHelpers/CallPost");
 const CallEvent_1 = require("../callHelpers/CallEvent");
+const CallMembers_1 = require("../callHelpers/CallMembers");
 function PostMutations(connection, theData) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(theData);
@@ -84,11 +85,12 @@ function PostMutations(connection, theData) {
         */
         //TASKGROUP 
         let groupsMoodle = yield CallGroups_1.callGroupFromMoodle(connection, true);
+        let allMembers = yield CallMembers_1.callGroupMembersFromMoodle(connection, true);
         yield Promise.all(groupsMoodle.map((element) => __awaiter(this, void 0, void 0, function* () {
             let theQuery = `
         mutation createTaskGroup{ 
             createTaskGroup (classroomId: ${theData.idClassroom},, input:{
-                members: "options", 
+                members: "${allMembers}", 
                 name: "${element.name}",
                 roomId: ${theData.idRoom},
                 userId: ${theData.idUser}
@@ -110,9 +112,9 @@ function PostMutations(connection, theData) {
                 backgroundId: 0,
                 category: 0,
                 classroomId: ${theData.idClassroom},
-                description: "${element.description}",
+                description: "${element.summary}",
                 isVideo: false,
-                option: "options",
+                option: "${element.options}",
                 privacy: false,
                 url: "url_test",
                 userId: ${theData.idUser}
@@ -131,8 +133,8 @@ function PostMutations(connection, theData) {
         mutation createEvent{
             createEvent(classroomId: ${theData.idClassroom}, input: {
                 calendarId: ${theData.idCalendar},
-                data: "description_test",
-                options: "options", 
+                data: "${element.name}",
+                options: "${element.options}", 
                 schedule: "schedule_test",
             }){
                 id

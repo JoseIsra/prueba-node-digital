@@ -7,7 +7,7 @@ import { callPostFromMoodle } from '../callHelpers/CallPost';
 import { callEventFromMoodle } from '../callHelpers/CallEvent';
 import { callGroupMembersFromMoodle } from '../callHelpers/CallMembers';
 
-export async function PostMutations(connection: any, theData: premutationsIds){
+export async function PostMutations(connection: any, theData: premutationsIds, hasPrefix: boolean, databaseName: string){
     console.log(theData);
     
     

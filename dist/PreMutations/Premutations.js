@@ -62,7 +62,7 @@ function preMutations(connection) {
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test_33",
+            name: "service_test_34",
             paymentMethods: "payment_test",
             previewVideo: "previewVideo_test",
             pricing: "pricing_test",
@@ -202,7 +202,7 @@ function preMutations(connection) {
           description: "${element.fullname}",
           hidden: false,
           name: "${element.fullname}",
-          options: "options", 
+          options: "${element.options}", 
           order: 1,
           url: "url_test",
           }){
@@ -220,7 +220,7 @@ function preMutations(connection) {
               contentId: ${idContentTemp},
               hidden: 1,
               name: "${element.fullname}",
-              option: "options", 
+              option: "${element.options}", 
               order: 1
               }){
                   id,

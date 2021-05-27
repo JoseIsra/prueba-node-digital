@@ -10,8 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mysql = require('mysql');
-const PostMutations_1 = require("./PostMutations/PostMutations");
-let database_name = 'moodle';
+let database_name = 'mydb';
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -32,23 +31,8 @@ connection.query(`
   LIMIT 1;`, (err, results) => __awaiter(void 0, void 0, void 0, function* () {
     if (err)
         console.log('error');
-    if (results.length == 0) {
-        //let premutationsIds: premutationsIds = await preMutations(connection);
-        let myData = {
-            idClassroom: '7',
-            idService: '58',
-            idContentGroup: '46',
-            idsContent: [{ id: 66, name: 'Demo Moodle' }, { id: 67, name: 'Tesis 5' }],
-            idsChapter: [{ id: 64, name: 'Demo Moodle' }, { id: 65, name: 'Tesis 5' }],
-            idRoom: '38',
-            idUser: '6',
-            idGroup: '32',
-            idSubGroup: '33',
-            idCalendar: '63'
-        };
-        PostMutations_1.PostMutations(connection, myData);
-    }
-    else {
-        console.log("Without prefix");
-    }
+    let hasPrefix = results.length == 0;
+    console.log(hasPrefix);
+    //let premutationsIds: premutationsIds = await preMutations(connection, hasPrefix);
+    //PostMutations(connection, premutationsIds, hasPrefix);
 }));
