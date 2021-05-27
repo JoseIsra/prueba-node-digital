@@ -1,9 +1,29 @@
 import { Course } from '../Intefaces/theInterfaces';
 
-export function callCourseFromMoodle(connection: any, hasPrefix: boolean): Promise<Course[]> {
-
+export function callCourseFromMoodle(connection: any, hasPrefix: boolean, databaseName: string): Promise<Course[]> {
+  if(hasPrefix){
     return new Promise( function (resolve,reject) {
-        connection.query(`
+      connection.query(`
+      SELECT fullname, CONCAT("{ category:",category,
+      ",sortorder:",sortorder,",fullname:",fullname,",shortname:",
+      shortname,",summaryformat:",summaryformat,",format:",format,
+      ",showgrades:",showgrades,",newsitems:",newsitems,",startdate:",
+      startdate,",enddate:",enddate,",relativedatesmode:",relativedatesmode,
+      ",marker:",marker,",maxbytes:",maxbytes,",legacyfiles:",legacyfiles,",showreports:",showreports,",visible:",visible,",visibleold:"
+      ,visibleold,",downloadcontent:",IFNULL(downloadcontent," empty"),
+      ",groupmode:",groupmode,",groupmodeforce:",groupmodeforce,",defaultgrouping:",defaultgroupingid,
+      ",timecreated:",timecreated,",timemodified:",timemodified,",requested:",requested,",enablecompletion:",enablecompletion,",completionnotify:",completionnotify,
+      "}") as options
+      FROM mdl_course;
+      `,
+      (err: any, results: Course[]) => {
+      if (err) throw err;
+      resolve(results);
+    });
+  })
+  }else{
+    return new Promise( function (resolve,reject) {
+      connection.query(`
         SELECT fullname, CONCAT("{ category:",category,
         ",sortorder:",sortorder,",fullname:",fullname,",shortname:",
         shortname,",summaryformat:",summaryformat,",format:",format,
@@ -14,12 +34,13 @@ export function callCourseFromMoodle(connection: any, hasPrefix: boolean): Promi
         ",groupmode:",groupmode,",groupmodeforce:",groupmodeforce,",defaultgrouping:",defaultgroupingid,
         ",timecreated:",timecreated,",timemodified:",timemodified,",requested:",requested,",enablecompletion:",enablecompletion,",completionnotify:",completionnotify,
         "}") as options
-        FROM mdl_course;
+        FROM ${databaseName}.course;
         `,
         (err: any, results: Course[]) => {
         if (err) throw err;
         resolve(results);
       });
     })
+  }
 }
   

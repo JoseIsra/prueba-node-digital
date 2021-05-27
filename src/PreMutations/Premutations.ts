@@ -19,8 +19,8 @@ let theData = {
 
 export async function preMutations(connection: any, hasPrefix: boolean, databaseName: string): Promise<premutationsIds>{
     
-  let dataUser: User = await callUserFromMoodle(connection, true);
-  let teachers: string = await callTeacherFromMoodle(connection, true);
+  let dataUser: User = await callUserFromMoodle(connection, hasPrefix, databaseName);
+  let teachers: string = await callTeacherFromMoodle(connection, hasPrefix, databaseName);
 
   /*
   let clasroomMutation = `
@@ -203,7 +203,7 @@ export async function preMutations(connection: any, hasPrefix: boolean, database
     theData.idCalendar = calendarData['createCalendar'].id;
        
     // CONTENT AND CHAPTER
-    let results: Course[] = await callCourseFromMoodle(connection, true);
+    let results: Course[] = await callCourseFromMoodle(connection, true, databaseName);
     
     await Promise.all(results.map(async (element: Course)=>{
       let idContentTemp: string; 
