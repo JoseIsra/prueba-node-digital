@@ -12,7 +12,7 @@ export async function PostMutations(connection: any, theData: premutationsIds, h
     
     
     //QUESTIONS
-    let questionMoodle =  await callQuestionsFromMoodle(connection, true, databaseName);
+    let questionMoodle =  await callQuestionsFromMoodle(connection, hasPrefix, databaseName);
     await Promise.all(questionMoodle.map(async (element: questionQuery)=>{
         await Promise.all(theData.idsChapter.map(async (theChapter: loopOfIds)=>{
             if(theChapter.name == element.courseName){
@@ -43,7 +43,7 @@ export async function PostMutations(connection: any, theData: premutationsIds, h
 
     /*
     //SINGLE TASK 
-    let assignMoodle = await callAssignFromMoodle(connection, true, databaseName);
+    let assignMoodle = await callAssignFromMoodle(connection, hasPrefix, databaseName);
     console.log(assignMoodle);
     await Promise.all(assignMoodle.map(async (element: singleTaskQuery)=>{
         await Promise.all(theData.idsContent.map(async (theContent: loopOfIds)=>{
@@ -78,8 +78,8 @@ export async function PostMutations(connection: any, theData: premutationsIds, h
     */
     
     //TASKGROUP 
-    let groupsMoodle = await callGroupFromMoodle(connection, true, databaseName);
-    let allMembers = await callGroupMembersFromMoodle(connection, true, databaseName);
+    let groupsMoodle = await callGroupFromMoodle(connection, hasPrefix, databaseName);
+    let allMembers = await callGroupMembersFromMoodle(connection, hasPrefix, databaseName);
     await Promise.all(groupsMoodle.map(async (element: taskGroupQuery)=>{
         let theQuery = `
         mutation createTaskGroup{ 
@@ -99,7 +99,7 @@ export async function PostMutations(connection: any, theData: premutationsIds, h
 
 
     // POST 
-    let postMoodle = await callPostFromMoodle(connection, true, databaseName);
+    let postMoodle = await callPostFromMoodle(connection, hasPrefix, databaseName);
     await Promise.all(postMoodle.map(async (element: postQuery)=>{
         let theQuery = `
         mutation createPost{
@@ -126,7 +126,7 @@ export async function PostMutations(connection: any, theData: premutationsIds, h
     
     
     // EVENT AND USER_EVENT
-    let eventMoodle = await callEventFromMoodle(connection, true, databaseName);
+    let eventMoodle = await callEventFromMoodle(connection, hasPrefix, databaseName);
     await Promise.all(eventMoodle.map(async (element: eventQuery)=>{
         let theQuery = `
         mutation createEvent{
