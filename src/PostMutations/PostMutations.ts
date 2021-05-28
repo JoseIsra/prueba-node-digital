@@ -7,12 +7,12 @@ import { callPostFromMoodle } from '../callHelpers/CallPost';
 import { callEventFromMoodle } from '../callHelpers/CallEvent';
 import { callGroupMembersFromMoodle } from '../callHelpers/CallMembers';
 
-export async function PostMutations(connection: any, theData: premutationsIds){
+export async function PostMutations(connection: any, theData: premutationsIds, hasPrefix: boolean, databaseName: string){
     console.log(theData);
     
     
     //QUESTIONS
-    let questionMoodle =  await callQuestionsFromMoodle(connection, true);
+    let questionMoodle =  await callQuestionsFromMoodle(connection, hasPrefix, databaseName);
     await Promise.all(questionMoodle.map(async (element: questionQuery)=>{
         await Promise.all(theData.idsChapter.map(async (theChapter: loopOfIds)=>{
             if(theChapter.name == element.courseName){
@@ -39,11 +39,10 @@ export async function PostMutations(connection: any, theData: premutationsIds){
             }
         }));
     }));
-    console.log("questions");
 
     /*
     //SINGLE TASK 
-    let assignMoodle = await callAssignFromMoodle(connection, true);
+    let assignMoodle = await callAssignFromMoodle(connection, hasPrefix, databaseName);
     console.log(assignMoodle);
     await Promise.all(assignMoodle.map(async (element: singleTaskQuery)=>{
         await Promise.all(theData.idsContent.map(async (theContent: loopOfIds)=>{
@@ -78,8 +77,8 @@ export async function PostMutations(connection: any, theData: premutationsIds){
     */
     
     //TASKGROUP 
-    let groupsMoodle = await callGroupFromMoodle(connection, true);
-    let allMembers = await callGroupMembersFromMoodle(connection, true);
+    let groupsMoodle = await callGroupFromMoodle(connection, hasPrefix, databaseName);
+    let allMembers = await callGroupMembersFromMoodle(connection, hasPrefix, databaseName);
     await Promise.all(groupsMoodle.map(async (element: taskGroupQuery)=>{
         let theQuery = `
         mutation createTaskGroup{ 
@@ -95,11 +94,10 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         const data = JSON.stringify({ query: `${theQuery}`});
         const result =  await fetchApi(data);
     }));
-    console.log("task_group");
 
 
     // POST 
-    let postMoodle = await callPostFromMoodle(connection, true);
+    let postMoodle = await callPostFromMoodle(connection, hasPrefix, databaseName);
     await Promise.all(postMoodle.map(async (element: postQuery)=>{
         let theQuery = `
         mutation createPost{
@@ -121,12 +119,11 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         const data = JSON.stringify({ query: `${theQuery}`});
         const result =  await fetchApi(data);
     }));
-    console.log("post");
     
     
     
     // EVENT AND USER_EVENT
-    let eventMoodle = await callEventFromMoodle(connection, true);
+    let eventMoodle = await callEventFromMoodle(connection, hasPrefix, databaseName);
     await Promise.all(eventMoodle.map(async (element: eventQuery)=>{
         let theQuery = `
         mutation createEvent{
@@ -161,7 +158,6 @@ export async function PostMutations(connection: any, theData: premutationsIds){
         const userEventData = await fetchApi(userEventQuery);
         */
     }));
-    console.log("event");
     
     
     connection.end();

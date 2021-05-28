@@ -17,10 +17,10 @@ let theData = {
   idCalendar: "",
 };
 
-export async function preMutations(connection: any): Promise<premutationsIds>{
+export async function preMutations(connection: any,hasPrefix:boolean,databaseName:string): Promise<premutationsIds>{
     
-  let dataUser: User = await callUserFromMoodle(connection, true);
-  let teachers: string = await callTeacherFromMoodle(connection, true);
+  let dataUser: User = await callUserFromMoodle(connection, hasPrefix, databaseName);
+  let teachers: string = await callTeacherFromMoodle(connection, hasPrefix, databaseName);
 
   /*
   let clasroomMutation = `
@@ -57,7 +57,7 @@ export async function preMutations(connection: any): Promise<premutationsIds>{
             description: "description_test",
             hidden: 1,
             image: "image_test",
-            name: "service_test_33",
+            name: "service_test_36",
             paymentMethods: "payment_test",
             previewVideo: "previewVideo_test",
             pricing: "pricing_test",
@@ -201,9 +201,9 @@ export async function preMutations(connection: any): Promise<premutationsIds>{
     const calendarData = await fetchApi(calendarQuery);
     console.log(calendarData['createCalendar'].id);
     theData.idCalendar = calendarData['createCalendar'].id;
-       
+      
     // CONTENT AND CHAPTER
-    let results: Course[] = await callCourseFromMoodle(connection, true);
+    let results: Course[] = await callCourseFromMoodle(connection, true, databaseName);
     
     await Promise.all(results.map(async (element: Course)=>{
       let idContentTemp: string; 
